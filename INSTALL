@@ -1,0 +1,11 @@
+*Installatin
+
+Just do the following!
+
+$ make
+$ make -C doc
+$ make install
+
+If you don't need EPS output, please comment the line 
+#define PS
+in jgr.h before compilation.

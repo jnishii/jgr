@@ -1,0 +1,181 @@
+TODO:
+- 親メニューが移動したとき、子メニューがついてこない
+- 書式の統一
+- 相対座標での直線や多角形の描画
+- メニューフォントのmultibyte化
+- ps 出力のフォントの位置がおかしいのを直す
+- symbol フォントに対応するfontsetが無いので， symbolが使えない。 
+  UTF環境なら大丈夫なのかも
+- English Manual
+- simplify Menu routine (avoid heavy load)
+
+- show title text on each window
+- string type (length of float) of number for axis
+- support rotated text
+- make margin variable
+- enable 'try' and 'catch'
+- how to utilize XSizeHints?
+
+- support PS output for dotted line  [2 2] 0 setdash 
+- How can Idefine pset, line type in PS? (using setdash...?)
+	
+Changelog:
+* 2008/11/14 3.4
+- enable Multibyte fonts for ScaleFont and TextFont
+- added Gothic and Mincho
+- use Gothic as deafult font
+	
+* 2008/11/11 3.3
+- suppress verbose messages
+
+* 2008/10/7 3.2
+- added polygon routines: poly, fillPoly, closePoly
+	
+* 2008/10/6 3.1
+- bug fix for ev2button()
+- add function ev2button as a member of XController, JWindow, Graph
+- revise some documents
+	
+* 2008/10/3 3.0
+- obsolete the macro PS and make flags to enable PS recording
+- new functions functions for font setting
+-- setTextFont, setScaleFont
+- improve font search process when specifed font is not available
+- new functions for color setting
+-- setFgColor, setBgColor
+-- bug fix for PS routine when writing rectangle
+- enable compile dylib for Mac OSX (Leopard)
+- new examples: font.cc
+	
+* 2008/10/2 2.2
+- fix bug for EPSOut when jgr is compiled without the declaration of PS
+
+2008/8/20 2.1
+- added function cross for Graph
+- compile without PS routine
+- added FontDB TextFont;
+- added mouse_press( XEvent &ev ) for Graph and JWindow
+- added ev2x, ev2y for Graph
+- new examples: mouse.cc
+
+2005/3/31: 2.0
+- compile with Menu classes
+- separate jgr from jkit
+- some document preparations
+
+2004/4/19: 1.31
+- fix minor gramatic problem (use new for dynamical allocation
+  for temporal matrix in jgr.cc
+
+2004/4/13: 1.30
+- added GausRand in jmath.h
+
+2004/3/31: 1.29
+- remove form() from jgr 
+- remove default value definition in jgr.cc
+
+2004/1/29: 1.28
+- added JWin.forget()
+- added Graph.pushcolor()
+- added Graph.popcolor()
+- set axis color as black
+- update document
+
+2004/01/15: 1.27
+	- jgr.h の minor なバグ修正
+	
+2003/01/19: 1.26
+	- jgr.h の minor なバグ修正
+
+2000/04/12: 1.25
+	- jgr.h の MenuFont 宣言を extern にして、定義は jgr.cc にうつした。
+	
+2000/04/05: 1.24 としてパッケージング
+	
+2000/03/31:
+	- ドキュメント更新
+	
+1999/11/24: 1.23
+	- 少しコードの整理
+	- Menu の unmap() のときに、mappedかどうかをチェック
+	- 複数のメニューをJWindowに表示できるように(まだバギーと思う)
+	
+1999/07/18: 1.22
+	- addItem で登録する関数の引数が Menu だったのを void にした。
+	- addClose(), addExit() 追加
+	- 入力窓で、確定／未確定の色分け
+
+1999/07/18: 1.21
+	- 多くのルーチンの見直し. Menuクラスで処理してたアイテム関連の仕事を
+	 MenuItemの関数にした。
+	- InputWindow class を廃止。InputItem class を作って, メニューの中に
+	入力窓を埋め込めるようになった。
+	
+1999/07/13: !!!!!!split to 1.2!!!!!!
+	- ウィンドウやメニューのサイズ調節をmapの時に行うようにした。
+	  map時の速度は少し遅くなる可能性があるが、サイズ変更を要する作業は
+	  多分楽になると思う。。。
+	- InputWindowのメッセージは、入力窓の左に出るようにした。
+	
+1999/07/13:
+	- 少し掃除
+
+1999/07/9: 1.14
+	- menuを登録したときに、他のウィンドウでグラフ表示位置がおかしくなる
+	  バグ修正
+	- eps ファイルのヘッダのバグ修正
+	- eps ファイルに破線の設定をできるよう追加(バグがありそう)
+	
+1999/06/27: 1.13
+	- input ウィンドウにカーソル表示をするようにした。
+	
+1999/06/26: 1.12
+	- addSubmenu のかわりに addItem も使えるようにした。
+	- input ウィンドウが親ウィンドウの横に出るようにした
+	- Temporal なサブメニューは、他のメニューをクリックしたときにunmap
+
+1999/06/25: 1.11
+	- addGetString, addGetValue を クラス Menu に追加
+
+1999/06/21: 1.10
+	- class ItemMenu を追加。addSubmenu からは ItemMenuへのポインタを追
+	加するようにした。
+
+1999/06/21: 1.09
+	- class ItemFunc を追加。addItem からは ItemFuncへのポインタを追加す
+	るようにした。
+
+1999/06/16: 1.08
+	- menu を、open してから各種登録するように変更。
+	(graph関連とあわせるための修正. これまではopenはmapの直前)
+
+1999/06/16: 1.07
+	- XSizeHintsを使う。
+	- 雑多なソース修正
+	- Static Menu は最後にunmapした位置にmapするようにした(bug fix)
+	
+1999/06/16: 1.06
+	- 同時に同じサブメニューが立ち上がらないないようにした。
+	- 親メニューがHORIZONTALなとき、サブメニューが親メニューの
+	  下に表示されるようにした。VERTICALの時は右横に出るようにしたが、
+	  動作はまだ未確認。
+
+1999/06/15: 1.05
+	- menu.act の修正。map されてるいずれのウィンドウでも
+	  イベントを受け付けるようにした。
+	- InputWindow にも枠を付けた
+
+1999/06/14: 1.04
+	- menu のフォーカスまわりの大幅修正
+	- menu に枠を付けた
+
+1999/06/14: 1.03
+	- menu を JWindow 上に表示できるように修正
+
+1999/06/13: 1.02
+	- menu 関連の修正・動作確認・menu.cc追加
+
+1999/06/11: 1.01
+	- jmath.h のバグフィックス
+
+	

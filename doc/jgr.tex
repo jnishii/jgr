@@ -1,0 +1,1320 @@
+\documentclass[11pt]{jarticle}
+\usepackage{geometry}
+\usepackage{ascmac,fancyheadings}
+\usepackage{makeidx}
+\usepackage{hyperref}
+\usepackage{makeidx}
+
+\makeindex
+\geometry{width=16cm,height=25cm}
+
+\begin{document}
+
+\noindent
+\rule{\linewidth}{1pt}
+\begin{center}
+{\Large\gtfamily Ｃ＋＋グラフィック・クラスライブラリＪＧＲの使い方 \\
+\large(ＪＧＲ ｖｅｒ．３．ｘ準拠) }
+\end{center}
+\begin{flushright}
+\today 版\quad
+西井 淳
+\end{flushright}
+\rule{\linewidth}{1pt} 
+
+\newpage
+{\small
+\tableofcontents
+}
+
+\newpage
+\pagestyle{fancyplain}
+
+\section{はじめに}
+\subsection{jgr-3.xの変更点}
+以下はjgr-2.xから3.xへの主な変更点です。
+\begin{itemize}
+\item EPSルーチンの制御がコンパイルオプションで与えられていたのを
+関数による制御に変更。これによりグラフのどの部分をEPSに出力するか等
+細かな調整が可能になった。
+\item 関数名の命名規則を統一した。ただしjgr-2.xまでの関数名でも利用出
+  来る。
+\item 座標軸の目盛りのフォントとテキストのフォントを独立に設定可能に
+  (setScaleFont,setTextFont) 
+\item 座標軸の色とグラフ等の図形の色独立に設定可能に
+\item ウィンドウの背景色設定用関数追加(setBgColor)
+\item サンプルプログラムの修正と追加
+\end{itemize}
+
+\subsection{jgr の特徴}
+JGRはX Window上でグラフィックを描くための C++ クラスライブラリです。
+複数のウインドウを管理でき, また, １つのウインドウ内に複数のグラフを
+管理できます。プログラムの実行中に随時計算結果をどんどんプロットしていき
+たい時に便利です。
+
+通常、グラフを描く時にはX軸の座標の単位系（例えばm,s)における値と
+グラフック画面上での値（ドット）が違いますが、このグラフィック・ツールでは
+X、Y軸の長さ、実際の値（m,sなど）と画面上での値（ドット）の関係などを
+はじめに与えておくことによって、あとは自動的に実際の値から座標変換を
+行なって点や線を描いてくれます。
+Xlib の関数を使ってますが, Xlib を意識せずに使用できます。
+表示結果はEPS形式で出力することもできます。
+
+\subsection{動作環境}
+C++をコンパイル出来, X Windowが動いてるシステム上なら動作すると思いま
+す。
+jgr-3.xはVine Linux 4.xとMac OS X(Leopard)上で動作確認しています。
+
+\subsection{謝辞}
+PS関連ルーチン(jgrPS.cc)は荻原剛志氏のXeasyGraphicをベースにして
+開発しています。大変感謝です。
+
+\subsection{ライセンス}
+PS関連ルーチン(jgrPS.cc)は XeasyGraphic-Copyright に、それ以外はLGPLと
+します。
+
+\subsection{その他の注意}
+バグレポート・パッチその他，西井
+(\verb|nishii@bcl.sci.yamaguchi-u.ac.jp|)まで御連絡頂けますととても嬉しいです。
+
+\section{jgrの入手とインストール}
+\subsection{jgrの入手}
+jgrは\url{http://bcl.sci.yamaguchi-u.ac.jp/~jun/?JGR}から入手出来ます。
+Vine Linuxで使う場合はrpm形式のパッケージを，
+他の環境で使う場合はソースを入手してください。
+
+\subsection{jgrのインストール}
+\subsubsection{Vine Linuxの場合}
+rpmコマンドでインストールしてください。
+ダウンロードしたパッケージ名が
+\verb|jgr-3.0-0vl1.i386.rpm|ならば以下を実行します．
+\begin{verbatim}
+    # rpm -ivh jgr-3.0-0vl1.i386.rpm
+\end{verbatim}
+サンプルプログラムやドキュメントは\verb|/usr/share/doc/jgr-3.0|以下にインストールされます。
+インストールされたファイル一覧は以下で確認できます。
+\begin{verbatim}
+    $ rpm -ql jgr
+\end{verbatim}
+
+\subsubsection{ソースからmakeする場合}
+
+Linux上の場合は以下のようにします。
+{\small
+\begin{verbatim}
+    # ln -sf Makefile.linux Makefile 
+    # make
+    # make -C doc
+    # make install
+\end{verbatim}}
+
+Mac OSXの場合は以下の通り。
+{\small
+\begin{verbatim}
+    # ln -sf Makefile.mac Makefile
+    # 以下はLinuxの場合と同じ
+\end{verbatim}}
+
+
+\section{jgr の使い方}
+\subsection{ブログラミング時の注意}
+\begin{itemize}
+\item jgrはCプログラムで使えますが，
+  コンパイルにはC++コンパイラ \verb|g++| を使って
+ 下さい\footnote{IntelのC++コンパイラでも動作確認しています。}。
+  CのプログラムのヘッダにC++の標準入出力ライブラリ(stream.h)を追加
+  すれば，g++でCプログラムもコンパイル出来ます。
+    \begin{verbatim}
+    #include <stream.h>
+  \end{verbatim}
+\item jgrを使うには、以下のヘッダファイルをincludeして下さい。
+  \begin{verbatim}
+    #include <jkit/jgr.h>
+  \end{verbatim}
+\item コンパイル時には libX11, libjgr をリンクして下さい。
+  \verb|g++|のコンパイルオプションは、\verb|-lX11 -ljgr| になります
+\end{itemize}
+具体的なコンパイルの仕方は後の例を見て下さい. 
+
+\subsection{サンプルプログラム}
+
+このプログラム例は、sampleディレクトリに tiny.cc という名前で置いてあり
+ます。サンプルプログラムのあるディレクトリで以下を実行すれば
+コンパイル出来ます。
+\begin{verbatim}
+    make tiny
+\end{verbatim}
+単に引数無しでmakeを実行するとサンプルプログラム全部がコンパイルされます。
+
+\verb|g++|を使うなら以下のようにします。
+\begin{verbatim}
+    g++ -o tiny -lm -ljgr -L /usr/X11R6/lib -lX11 tiny.cc
+\end{verbatim}
+
+以下はtiny.ccのソースです。
+\begin{screen}
+{\small
+\begin{verbatim}
+#include <stream.h>
+#include <iostream.h>
+#include <jkit/jgr.h>    //jgrクラスを使うのに必要
+
+JWindow win;             //開くウィンドウを宣言
+Graph   g;               //ウィンドウに描画するグラフを宣言
+
+main(){
+  extern JWindow win;             //開くウィンドウを宣言
+  extern Graph   g;               //ウィンドウに描画するグラフを宣言
+  double xmax, ymax;
+  char *msg="Click the Mouse, Please!!";
+  
+  // ウィンドウと、そこに描くグラフを登録-----------------------
+  win.open(10,10)  // ウィンドウを(10,10)の位置に開く宣言
+    .graph(g.open( 500, 50, 200, 40 )) 
+    // 開いたウィンドウに、x軸の正負方向が(500,50)、
+    //y軸の正負方向(200,40)のグラフを登録
+    .map()            // ウィンドウを画面上にマップする。
+    .mouseWait();    // マウス・クリックの入力を待つ
+  
+  //ここからは、グラフ g の属性設定------------------------------
+  xmax = 10.0;  ymax = 100.0;
+  g.setRatio( xmax, ymax, 500.0, 200.0 ) 
+    // xmax, ymax の値をそれぞれ、画面上では500dot, 200dotの長さで描画
+    .axis() // X軸, Y軸を描画
+    .text( 5, -15, msg )  // メッセージをグラフ上の(5,-15)の位置に出力
+    .flush()          // グラフィック・バッファにたまってるデータをフラッシュ
+    .mouseWait();    // マウス・クリックの入力を待つ
+  
+  //メインルーチン：グラフg上に線を書く.....
+  for( double i=1.0; i<=xmax; i+=0.1 ){
+    g.color("blue") // グラフ g の描画色を青にする
+      .line( (double)i, 0.0, 0.0, (xmax-(double)i)*ymax/xmax )
+      // (i,0.0) から (0.0, (xmax-(double)i)*ymax/xmax)に線を引く
+      .flush();   
+    mouseBreak();  // マウス・クリックがあったらforループから抜ける
+  }
+  
+  g.color("black")
+    .text( 5, -15, msg) // テキスト表示
+    .mouseWait();      // マウス・クリックを待つ
+  Xwin.close();          // 終了の儀式
+}
+\end{verbatim}}
+\end{screen}
+なんとなく tiny.cc がわかったら他のサンプルプログラムも見てみてください。
+以下はサンプルプログラムのリストです。
+\begin{center}
+\begin{tabular}[t]{c|l}\hline
+tiny.cc & 簡単なグラフを書く\\
+sample.cc & tiny.ccに円や四角などの描画のルーチンを増やしたもの\\
+sin.cc  & 複数の窓を開き、一つの窓には複数のグラフ描画。EPS出力も行う\\
+mouse.cc & マウスのクリック情報を取得\\
+font.cc & 各種フォントの表示\\
+tinymenu.cc & メニューの利用例\\
+menu.cc & メニューの利用例2\\\hline
+\end{tabular}
+\end{center}
+
+プログラムに用いられる各関数の詳細は以降の節で紹介します。
+
+\section{基本的な関数}
+この節では、ウィンドウやそこに描画するグラフを初期化する関数について、
+ほぼプログラム内で宣言する順番で紹介して行きます。
+
+\subsection{ウィンドウを開く}
+\begin{screen}
+{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+open+}
+\begin{verbatim}
+JWindow& open( unsigned int sx, unsigned int sy, 
+              unsigned int width, unsigned int height, int bsflag=True );
+JWindow& open( unsigned int sx, unsigned int sy, int bsflag=True );
+\end{verbatim}
+  \begin{itemize}
+  \item \verb|(sx,sy)|: 左上の角の座標、原点は画面の左上の角
+  \item \verb|(width,height)|: ウィンドウの幅と高さ
+  \item \verb|bsflag|: バッキングストアを使うかどうか(指定がなければ''使う'')
+  \end{itemize}
+}
+\end{screen}
+  
+ウィンドウのクラス名は \verb|JWindow| です。例えば2つウィンドウを開きた
+いときには、
+\begin{verbatim}
+    JWindow win1, win2;
+\end{verbatim}
+と宣言します。さらに、このウィンドウの大きさや位置を以下のように指定します。
+\begin{itemize}
+\item 大きさと位置両方を指定するとき、
+\begin{verbatim}
+    win1.open(10,10,200,100); //座標(10,10)を左上の角とし、幅200dot,高さ100dot
+\end{verbatim}
+\item 位置のみ指定し、大きさは登録するグラフの大きさに応じて自動的に決め
+  る時。
+\begin{verbatim}
+    win1.open(10,10); //座標(10,10)を左上の角とする
+\end{verbatim}
+\end{itemize}
+最後の引数のbsflagは、バッキングストアの指定を付け加えたいときに
+\verb|True| を，不要な時には\verb|False| を指定します。
+(よくわからなければこの引数は不要です)
+
+% この指定は独立に
+% \begin{screen}
+% \index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+depend_wm+}
+% \begin{verbatim}
+% JWindow& depend_wm(int wmflag=False);
+% \end{verbatim}
+% \end{screen}
+% という関数を用いて行うこともできます。
+
+\subsection{グラフの初期化}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+open+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+child+}
+\begin{screen}{\small
+\begin{verbatim}
+Graph&  open(int sx, int sy, int x_pos, int x_neg, int y_pos, int y_neg,
+            char* clr="black" );
+Graph&  open( int x_pos, int x_neg, int y_pos, int y_neg, 
+            char* clr="black" );
+Graph&  open( Graph& g, char* clr="black" );
+Graph&  child( Graph& g );
+Graph&  child( Graph& g, char* clr );
+\end{verbatim}
+  \begin{itemize}
+  \item \verb|(sx,sy)|: グラフの左上の角の座標、原点はウィンドウの左上の角
+  \item \verb|x_pos,x_neg|: X軸の正方向・負方向の長さ
+  \item \verb|y_pos,y_neg|: Y軸の正方向・負方向の長さ
+  \item \verb|clr|: グラフの描画色 ("red","blue" など X windowで使える
+    色名を指定)。指定しなければ黒に設定される。
+  \end{itemize}
+}
+\end{screen}
+   
+グラフのクラス名は \verb|Graph| です。それぞれのグラフについて宣言を以下
+のように行います。例えば２つグラフを書きたいときには(１つのウィンドウ上
+であっても、３つのウィンドウそれぞれに書くのであっても)、
+\begin{verbatim}
+    Graph grp1, grp2 ,grp3;
+\end{verbatim}
+と宣言します。次に、これらのグラフの初期化を行います。
+\begin{itemize}
+\item ウィンドウ中でのグラフの位置、大きさを指定するとき\\
+例えば、ウィンドウ中、(10,10)の位置にX軸の正負の方向の長さがそれぞれ
+100,10, Y軸の正負の方向の長さがそれぞれ 50,10 のグラフを書きたいときには
+\begin{verbatim}
+    grp1.open(10,10,100,10,50,10); 
+\end{verbatim}
+とします
+\item ウィンドウ中でのグラフの大きさだけ指定して、位置は自動で決める場合
+  には以下のようにします。
+\begin{verbatim}
+    grp2.open(100,10,50,10);   //大きさはgrp1と同じ場合の例
+\end{verbatim}
+\item あるグラフと同じ大きさのグラフを書きたい時には、
+\begin{verbatim}
+    grp3.open(grp2); 
+\end{verbatim}
+とします。この例では grp3 の大きさは grp2 と同じになり、位置は自動で決められます.
+\end{itemize}
+いずれの場合にも、描画色の指定をしたいときには、さらに
+\verb|"red"|, \verb|"blue"|などを指定した引数を加えてください。この指定
+は
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+color+}
+\begin{verbatim}
+Graph&  color( char* clr="black" );
+\end{verbatim}
+}
+\end{screen}
+を使って、いつでも変更できます。
+%グラフの座標軸の色を変えたいときは以下を使います。
+%\begin{screen}{\small
+%\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setAxisColor+}
+%\begin{verbatim}
+%Graph&  setAxisColor( char* clr="black" );
+%\end{verbatim}
+%}
+%\end{screen}
+%グラフの背景色を変えたい時には，以下の関数を使います。
+%\begin{screen}
+%{\small
+%\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+setBgColor+}
+%\begin{verbatim}
+%JWindow&  setBgColor( char* clr="black" );
+%\end{verbatim}
+%}
+%\end{screen}
+色指定についての詳細は\ref{sec:Color}節を見てください。
+
+さらに、あるグラフ(親グラフ)と\textbf{同じ位置に重ねてグラフ(子グラフ, child graph)を書きたいとき}には、
+子グラフの初期化に\verb|child|を使います。(１つのグラフに複数のデータ曲線を書く時などに使います)。
+例えば、子グラフ grp3 を 親グラフ grp2 と同じ位置に描く時、
+\begin{verbatim}
+    grp3.child(grp2);
+\end{verbatim}
+とします。
+子グラフの描画色は、それぞれ異なる色が自動的に選ばれます。
+自分で色の設定をしたいときには、
+\begin{verbatim}
+    grp3.child(grp2,"blue");
+\end{verbatim}
+と、色の指定を加えます。
+
+\subsection{ウィンドウにグラフを登録}
+
+\begin{screen}
+{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+graph+}
+\begin{verbatim}
+  JWindow& graph( Graph& g );
+\end{verbatim}
+}
+\end{screen}
+
+前節で初期化したグラフを、描画するウィンドウに登録します。
+例えば、グラフ\verb|grp1|をウィンドウーー\verb|win1|に描きたい場合には、
+\begin{verbatim}
+    win1.graph(grp1);
+\end{verbatim}
+とします。また、grp1の初期化とあわせて、
+\begin{verbatim}
+    win1.graph(grp1.open(100,10,50,10));
+\end{verbatim}
+などとすることもできます。
+
+\subsection{ウィンドウの描画}
+\begin{screen}
+{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+map+}
+\begin{verbatim}
+    JWindow& map( void );
+\end{verbatim}
+}
+\end{screen}
+ウィンドウにグラフの登録がすんだところで、ウィンドウをいよいよ
+Xウィンドウ上に描画します。単に
+\begin{verbatim}
+    win1.map();
+\end{verbatim}
+とするだけです。ただし、これだけだと X window の処理の問題上
+データがグラフィックバッファに入るだけですぐに描画されない時があります。
+そのときには、以下の命令をmapコマンドのあとに入れてください。
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+flush+}
+\begin{verbatim}
+   win1.flush();
+\end{verbatim}
+これで、バッファにたまっているデータがすべて描写されます。
+なおこの命令は、jgr のデフォルトで定義される画面制御のための
+クラス Xwin の関数(\ref{sec:XwinWindow}節)により、
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+flush+}
+\begin{verbatim}
+   Xwin.flush();
+\end{verbatim}
+を用いるのと等価です。
+
+\subsection{グラフ描画に関する初期設定}
+
+\begin{screen}
+{\small
+  \index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setRatio+}
+  \index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_ratio+}
+\begin{verbatim}
+Graph& setRatio( double realx, double realy, double scrx, double scry );
+Graph& setRatio( Graph& g );
+Graph& setRatio( void );
+\end{verbatim}
+  \begin{itemize}
+  \item (realx, realy): 実際の数値
+  \item (scrx, scry): スクリーン上での値(ドット)
+  \item jgr-2.xでの関数名: \verb|set_ratio|
+  \end{itemize}
+}
+\end{screen}
+
+計算で得られる数値の大きさと、画面上での大きさの関係を設定します。
+例えば、グラフgrp1上で、X軸の時間 10s を画面上で100dot、Y軸の速度 5m/s
+を画面上で60dotで表したい時には、
+\begin{verbatim}
+    grp1.setRatio(10,5,100,60);
+\end{verbatim}
+とします。また grp2 での設定は grp1 と同じにしたい時には、
+\begin{verbatim}
+    grp1.setRatio(grp2);
+\end{verbatim}
+さらに、グラフを重ねて描画しているchildグラフの場合には単に
+\begin{verbatim}
+    grp3.setRatio();
+\end{verbatim}
+とすれば、親グラフと同じ設定になります。
+
+この関数の設定後、線などを描画する時の座標の入力は、スクリーン上での大き
+さを気にすることなく、ただ、(時間、速度)といった実際の値を入力すれば
+描画ができます。
+
+なお、この関数を宣言しない時の、スクリーン上の値と実際の値の比は
+1:1に設定されています。
+
+\subsection{その他初期化に関する関数}
+\begin{screen}
+{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+addLeftMargin+}
+\begin{verbatim}
+JWindow& addLeftMargin(long xmargin);
+\end{verbatim}
+}
+\end{screen}
+ウィンドウに位置の自動割当でグラフを書いたとき、
+グラフの左にマージンがもうすこし欲しい場合に使う クラスJWindowの関数です.
+ウィンドウのmap前に指定してください。
+
+
+\section{いろいろな関数}
+
+各ウィンドウの操作には JWindow クラスのメンバー関数を使います。
+画面上に作ったウィンドウには複数のグラフを登録して描画することができ，
+各グラフの操作には Graph クラスのメンバー関数を使います。
+
+また，すべてのウィンドウの操作のために、XController というクラスがデフォルトで
+定義されています。
+以下の宣言が\verb|jgr.h|でされており，変数Xwinに対してメンバー
+関数を呼び出す事で，全てのウィンドウに対するいくつかの操作を行うことが
+できます。
+\begin{verbatim}
+    XController Xwin;
+\end{verbatim}
+
+以下ではJWindow,Graphクラスや，変数Xwinに対して使えるいろいろなメンバー
+関数を紹介します。
+各関数がどのクラスや変数に対するものかは各関数名の前に[]で囲って記して
+います。
+複数のクラスに対して同じ名前のメンバー関数がある場合，特に明記していな
+い限りその関数は，どのクラスに対しても同じ動作をします。
+
+
+\subsection{ウィンドウ操作}
+\begin{screen}{\small
+    \index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+map+}
+    \index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+unmap+}
+    % 
+    \verb|[JWindow] JWindow& map( void );|\\
+    \verb|[JWindow] JWindow& unmap( void );|
+    \begin{itemize}
+    \item ウィンドウを画面上にマップ(表示)する(\verb|map|)，
+      もしくはアンマップ(非表示)する(\verb|unmap|)。
+    \end{itemize}
+    % 
+    \index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+close+}
+    \verb|[Xwin] void close( void );|
+    \begin{itemize}
+    \item ウィンドウ全てを閉じる。\textbf{jgr終了時にかならず実行して
+        ください。}
+    \end{itemize}
+    %
+    \index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+clear+}
+    \index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+clear+}
+    \verb|[JWindow] JWindow& clear( void ); |\\
+    \verb|[Graph]   Graph&   clear( void );|
+    \begin{itemize}
+    \item ウィンドウ内を消去し，ウィンドウ上の全てのグラフのラストポイント
+      を消去する。
+    \end{itemize}
+    %
+    \index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+flush+}
+    \index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+flush+}
+    \index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+flush+}
+    \verb|[JWindow] JWindow& flush( void );|\\
+    \verb|[Graph]   Graph&   flush( void );|\\
+    \verb|[Xwin]    XController& flush( void );|
+    \begin{itemize}
+    \item ウィンドウ用のメモリバッファをフラッシュ(メモリバッファ上のデータを画
+      面上に出力)する。
+    \end{itemize}
+    % 
+    \index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+sync+}
+    \verb|[Xwin] XController& sync( void );|
+    \begin{itemize}
+    \item ウィンドウをシンクする。
+    \end{itemize}
+  }
+\end{screen}
+  
+\subsection{マウス操作}
+\begin{screen}{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+mousePress+}
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+mouse_press+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+mousePress+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+mouse_press+}
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+mousePress+}
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+mouse_press+}
+%
+\verb|[JWindow,Graph,Xwin] int mousePress( void );|
+% \verb|[Graph]   int mousePress( void );|\\
+% \verb|[Xwin]    int mousePress( void );|
+\begin{itemize}
+\item Xwinに対して呼び出した場合はいずれかのウィンドウに対して，
+  JWindowもしくはGraphに対して呼び出した場合はそのウィンドウに対して
+  マウスクリックを検出したときTrueを，それ以外のときFalseを返す。
+\item JGR-2.xでの関数名: \verb|mouse_press;|
+\end{itemize}
+%
+\verb|[JWindow,Graph] int mousePress( XEvent &ev );|
+%\verb|[Graph]   int mousePress( XEvent &ev );|
+\begin{itemize}
+\item グラフのあるウィンドウへのマウス入力があるとTrueを返す。
+また、取得したマウスイベント情報を変数evに代入する
+\item  \verb|XEvent|はXlibに用意されている構造体です。
+\item JGR-2.xでの関数名: \verb|mouse_press;|
+\end{itemize}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+ev2button+}
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+ev2button+}
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+ev2button+}
+\index{かんすう@関数!\verb+ev2button+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+ev2x+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+ev2y+}
+%
+\verb|[Xwin,JWindow,Graph,NONE] double ev2button(XEvent &ev);|
+\begin{itemize}
+\item mousePress()で取得したマウスイベント変数evを引数として、マウスのどのボタンがクリッ
+  クされたかを返す。
+\item ev2button は Xwin, JWindow, Graphの メンバ関数として呼びだすことも, 
+  単独の関数として呼び出すこともできます。
+\end{itemize}
+\verb|[Graph] double ev2x(XEvent &ev);|\\
+\verb|[Graph] double ev2y(XEvent &ev);|
+\begin{itemize}
+\item マウスイベント変数evを引数として、マウスクリックがクリックされた座標値x,yを返す。
+\end{itemize}
+%
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+mouseWait+}
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+mouse_wait+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+mouseWait+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+mouse_wait+}
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+mouseWait+}
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+mouse_wait+}
+\verb|[JWindow] JWindow&     mouseWait();|\\
+\verb|[Graph]   Graph&       mouseWait();|\\
+\verb|[Xwin]    XController& mouseWait();|
+\begin{itemize}
+\item JWindowもしくはGraphに対して呼び出した時はそのウィンドウへ，Xwinに対し
+  て呼び出した時はいずれかのウィンドウへのマウス入力があるまで待つ。
+\item JGR-2.xでの関数名: \verb|mouse_wait();|
+\end{itemize}
+}
+\end{screen}
+
+以下はマウス関数の使用例です。
+\begin{screen}{\small
+\begin{verbatim}
+JWindow win;
+Graph g;
+XEvent ev;
+
+win.open(10,10)
+   .graph(g.open(...));
+...
+
+// マウスがクリックされるまで待つ。win.mouseWait(ev); としても等価
+g.mouseWait(ev); 
+
+//どのボタンがクリックかを表示。以下のように呼び出すこともできる。
+//Xwin.ev2button(ev); win.ev2button(ev); g.ev2button(ev); 
+printf("押されたボタンは %d\n",ev2button(ev));
+
+printf("クリック位置は(%lf,%lf)\n", g.ev2x(ev), g.ev2y(ev));
+\end{verbatim}}
+\end{screen}
+サンプルプログラム\verb|sample.cc|も見てください。
+
+\subsection{座標軸関係の描画}
+
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_xscale_full+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_yscale_full+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_scale_full+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_axis_with_digit+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setXScaleFull+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setYScaleFull+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setScaleFull+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setAxisWithDigit+}
+%
+\begin{verbatim}
+[Graph] Graph&  setXScaleFull( int flag=True );
+[Graph] Graph&  setYScaleFull( int flag=True );
+[Graph] Graph&  setScaleFull( int flag=True );
+\end{verbatim}
+\begin{itemize}
+\item x軸(\verb|setXScaleFull|), y軸(\verb|setYScaleFull|),もしくは両者(\verb|setScaleFull|)の
+目盛刻みを高さ一杯にする
+\item jgr-2.xでの関数名: \verb|set_xscale_full|,
+  \verb|set_yscale_full|, \verb|set_scale_full|
+\end{itemize}
+\verb|[Graph] Graph&  setAxisWithDigit( int flag=True );|
+\begin{itemize}
+\item 座標軸には数値付き目盛をつける
+\item jgr-2.xでの関数名: \verb|set_axis_with_digit|
+\end{itemize}
+%
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+axis+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+axis+}
+\verb|[Graph] Graph&  axis( void );|
+\verb|[JWindow] JWindow& axis( void );|
+\begin{itemize}
+\item 座標軸を書く
+\item Jwindowに対して適用した場合はウィンドウ上の全てのグラフの座標軸を描く
+\end{itemize}
+%
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+axis_box+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+axisBox+}
+\verb|[Graph] Graph&  axisBox( void );|
+\begin{itemize}
+\item 枠で囲んだ座標軸を書く
+\item jgr-2.xでの関数名: \verb|axis_box( void );|
+\end{itemize}
+%
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+xaxis+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+yaxis+}
+\verb|[Graph] Graph&  xaxis( double blank );|\\
+\verb|[Graph] Graph&  yaxis( double blank );|\\
+\verb|[Graph] Graph&  xaxis( void );|\\
+\verb|[Graph] Graph&  yaxis( void );|
+\begin{itemize}
+\item \verb|xaxis()|はx座標軸を，\verb|yaxis()|はy座標軸を書く
+\item 間隔blankで座標軸の刻みを書く
+\item 間隔blankを指定しなければ間隔は自動で決まる
+\end{itemize}
+}
+\end{screen}
+
+もし、グラフgrpに関して
+\begin{verbatim}
+    grp.axis();
+\end{verbatim}
+とすると、
+\begin{picture}(70,40)
+\put(10,20){\line(1,0){60}}
+\put(40,0){\line(0,1){40}}
+\end{picture}
+という感じの座標軸が書かれます。また、
+\begin{verbatim}
+    grp.axisBox();
+\end{verbatim}
+とすると、
+\begin{picture}(70,40)
+\put(10,20){\line(1,0){60}}
+\put(40,0){\line(0,1){40}}
+\put(10,0){\framebox(60,40)}
+\end{picture}
+となります。
+
+X軸だけ、もしくはY軸だけ書きたいときには、
+\begin{verbatim}
+    grp.xaxis( 1.0 ); //目盛の刻み幅を1.0にして、
+    grp.yaxis( 0.1 ); //目盛の刻み幅を0.1にして、Y軸を書く
+    grp.xaxis();      // X軸を書く
+    grp.yaxis();      // Y軸を書く
+\end{verbatim}
+などとします。目盛の刻み幅の指定をしていないときには、目盛は自動設定にな
+ります。目盛をグラフ一杯の長さにしたい時には、
+\verb|setScaleFull()|や\verb|setXScaleFull()|、\verb|setYSCaleFull()|を使って、
+\begin{verbatim}
+    grp.setXScaleFull()
+       .axis();
+\end{verbatim}
+などとします。
+
+目盛に数値を表示したいときには、
+\begin{verbatim}
+    grp.setAxisWithDigit()
+       .axis();
+\end{verbatim}
+と、\verb|setAxisWithDigit()|を使います。
+
+\subsection{グラフ・図形描画関数}
+
+\subsubsection{直線を描く}
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+line+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+dashLine+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+dash_line+}
+\verb|[Graph] Graph&  line(double x, double y, double x2, double y2);|\\
+\verb|[Graph] Graph&  dashLine( double x, double y, double x2, double y2 );|
+\begin{itemize}
+\item (x,y)と(x2,y2)を直線もしくは点線で結ぶ
+\item Vine-2.xでの関数名: \verb|dash_line();|
+\end{itemize}
+\verb|[Graph] Graph&  line(double x, double y);|\\
+\verb|[Graph] Graph&  dashLine( double x2, double y2 );|
+\begin{itemize}
+\item ラストポイントと(x,y)を直線もしくは点線で結ぶ
+\item ラストポイントが設定されて無い時は(x,y)をラストポイントとする
+\item Vine-2.xでの関数名: \verb|dash_line();|
+\end{itemize}
+}
+\end{screen}
+
+各グラフで最後に描いた点はラストポイントとして記憶されています。
+折れ線グラフを描く時にはこれを利用すると楽です。
+例えば(1,1), (2,1), (3,4)を結ぶ線を描く方法です。
+\begin{verbatim}
+    Graph g;
+    ....
+    g.line(1,1,2,1).line(2,1,3,4); // ラストポイントを使わない場合
+    g.line(1,1).(2,1).(3,4);       // ラストポイントを使った場合
+\end{verbatim}
+$y=x^2$のグラフは以下のように描くことができます。
+\begin{verbatim}
+    for(x=-10;x<=10;x++) g.line(x,x*x);
+\end{verbatim}
+
+ラストポイントを消去したい時には以下の関数を使います。
+\begin{screen}
+{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+forgetLastPoint+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+forget+}
+\verb|[Graph] Graph& forgetLastPoint(void);|\\
+\verb|[Graph] Graph& forget(void);|
+\begin{itemize}
+\item ラストポイントの消去(\verb|forget|は\verb|fotgetLastPoint|の別名)
+\end{itemize}
+}
+\end{screen}
+
+直線の属性を変更したい時には以下の関数を使います。
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setLineSolid+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setLineDash+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setLineDDash+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_solid_line+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_dash_line+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+set_double_dash_line+}
+\verb|[Graph] Graph& setLineSolid( void );|
+\begin{itemize}
+\item 直線の属性を実線に変更
+\item jgr-2.xでの関数名: \verb|set_solid_line();|
+\end{itemize}
+%
+\verb|[Graph] Graph& setLineDash( void );|\\
+\verb|[Graph] Graph& setLineDDash( void );|
+\begin{itemize}
+\item 直線の属性を点線もしくは二点鎖線に変更
+\item jgr-2.xでの関数名: \verb|set_dash_line();|, \verb|set_double_dash_line();|
+\end{itemize}
+}
+\end{screen}
+
+\subsubsection{その他の図形}
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+pset+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+rectangle+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+fill+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+circle+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+fillCircle+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+fill_circle+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+poly+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+closePoly+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+fillPoly+}
+%
+\verb|[Graph] Graph&  pset(double x, double y);|
+\begin{itemize}
+\item (x,y)に点をうつ
+\end{itemize}
+\verb|[Graph] Graph&  rectangle( double x, double y, double width, double height );|\\
+\verb|[Graph] Graph&  fillRectangle( double x, double y, double width, double height );|
+\begin{itemize}
+\item 左上が(x,y)になる位置に(width,height)の四角形を描く
+\item \verb|fillRectangle|の場合は四角形の中を塗りつぶす
+\item Vine-2.xでの関数名: \verb|fill_rectangle|
+\end{itemize}
+\verb|[Graph] Graph&  cross( double x, double y, double r );|
+\begin{itemize}
+\item 中心が(x,y)のクロスを描く。
+\item クロスの長さがr(x軸方向の長さで指定)
+\end{itemize}
+%
+\verb|[Graph] Graph&  circle( double x, double y, double r );|\\
+\verb|[Graph] Graph&  fillCircle( double x, double y, double r );|
+\begin{itemize}
+\item 中心が(x,y)、半径r(x軸方向の長さで指定)の円を描く
+\item \verb|filCircle|の場合四角形のは中を塗りつぶす
+\item Vine-2.xでの関数名: \verb|fill_circle|
+\end{itemize}
+%
+\verb|[Graph] Graph&  poly( double x, double y );|\\
+\verb|[Graph] Graph&  closePoly( double x, double y );|\\
+\verb|[Graph] Graph&  fillPoly( double x, double y );|
+\begin{itemize}
+\item 点(x,y)を結ぶ多角形を描く
+\item 最後の点はfillPolyかclosePolyで指定。fillPolyなら中はぬりつぶさ
+  れる。
+\end{itemize}
+}
+\end{screen}
+
+以下はpolyを使って(0,0), (10,0), (5,5)を結んだ三角形を描く例です。
+\begin{screen}
+\begin{verbatim}
+   Graph g;
+   g.poly(0,0)
+    .poly(10,0)
+    .fillPoly(5,5); //塗りつぶさないならclosePolyを使う
+\end{verbatim}
+\end{screen}
+
+\subsection{色操作\label{sec:Color}}
+
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setFgColor+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+color+}
+\verb|[Graph] Graph&  setFGColor( char* clr="black" );|\\
+\verb|[Graph] Graph&  color( char* clr="black" );|
+\begin{itemize}
+\item 前景色指定(グラフ等の図形の絵の色)
+\item colorはsetFGcolorの別名です。
+\item 指定色は以下の他，UNIX X11カラーとして定めらている色名(140色)で
+  指定できます。
+  \begin{quote}
+"black", "blue", "red", "yellow", "green", "cyan","magenta", "brown", \\
+"lightgray", "darkgray", "lightblue", "lightgreen", "lightcyan",\\
+"lightred", "lightmagenta"
+  \end{quote}
+\item 例) \verb|g.color("red")|
+\end{itemize}
+%
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setAxisColor+}
+\verb|[Graph] Graph&  setAxisColor( char* clr="black" );|
+\begin{itemize}
+\item 座標軸の色指定(デフォルトは黒)
+\end{itemize}
+%
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+pushColor+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+popcolor+}
+\verb|[Graph] Graph&  pushColor( char* clr="black" );| \\
+\verb|[Graph] Graph&  popColor();| 
+\begin{itemize}
+\item 前景色を変更し、古い色は保存しておく(pushColor)。
+\item popColorは前景色を元の色に戻す
+\end{itemize}
+%
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+setBgColor+}
+\verb|[JWindow] JWindow& setBgColor(char *bgclr);|
+\begin{itemize}
+\item ウィンドウの背景色を変更する。
+\end{itemize}
+}
+\end{screen}
+
+色の設定例はサンプルプログラム\verb|sin.cc|などを見てください。
+
+\subsection{フォント設定とテキスト操作}
+
+以下はフォント設定のための関数です。
+\begin{screen}{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+setTextFont+}
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+setScaleFont+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setTextFont+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+setScaleFont+}
+\verb|[JWindow] JWindow&  setTextFont( int ftype, int fstyle, int size );|
+\verb|[Graph]   Graph&    setTextFont( int ftype, int fstyle, int size );|\\
+\verb|[JWindow] JWindow&  setScaleFont( int ftype, int fstyle, int size );|
+\verb|[Graph]   Graph&    setScaleFont( int ftype, int fstyle, int size );|
+\begin{itemize}
+\item  関数textで表示する文字フォントの設定(\verb|setTextFont|)，およ
+  び座標軸ラベルのフォント設定(\verb|setScaleFont|)
+\item \verb|ftype|はフォントの種類。以下の値を設定出来る。日本語を標示
+  したいときにはGothicかMinchoを使うこと。
+  \begin{quote}
+    Courier, Helvetica, Times, Symbol, Gothic, Mincho
+  \end{quote}
+\item \verb|fstyle|はフォントのスタイル。以下の値を設定出来る。
+  \begin{quote}
+    Roman, Bold, Italic, Oblique
+  \end{quote}
+\item \verb|size|はフォントの大きさ。以下の値を設定出来る。
+  \begin{quote}
+    8,10,11,12,14,17,18,20,24,25,34
+  \end{quote}
+\item JWindowに対して呼び出した場合には，ウィンドウ登録されるグラフの
+  テキストフォントのデフォルト値を設定出来ます。この場合上記の関数はウィ
+  ンドウのmapより前に実行してください。設定値はウィンドウのmap時に各グ
+  ラフのフォントに設定されます。
+\item Graphクラスに対して呼び出した場合は, 個々のグラフのフォントを個
+  別に変更します。
+\end{itemize}
+}
+\end{screen}
+
+以下はテキスト表示の関数です。
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+text+}
+\verb|[Graph] Graph& text( double x, double y, char *msg, int position=Center);|
+\begin{itemize}
+\item 文字列msgを位置(x,y)に書く。
+\item 位置(x,y)は文字の中心位置がデフォルト。引数positionで指定位置を
+  以下から選ぶことができる。
+\begin{quote}
+Left, Center, Right, LeftTop, CenterTop, RightTop, RightCenter 
+\end{quote}
+\end{itemize}
+}
+\end{screen}
+
+以下はテキストの表示例です。
+\begin{verbatim}
+    Graph g;
+    ...
+    g.text(50,0,"Hello!");          //"Hello"と表示. 文字列の中心位置が(50,0)
+    g.setTextFont(Courier,Roman,14) //フォントをサイズ14のCourier,Roman体に
+     .text(50,20,"Hello!",RightTop);//"Hello"と表示. 文字列の右上が(50,20)
+\end{verbatim}
+\verb|setTextFont|で指定したフォントがシステム上に無い時には，利用出来
+るものが探索されます。
+サンプルプログラム\verb|font.cc|のソースや実行例等も参考にしてください。
+
+
+\subsection{EPSファイルの出力}
+\begin{screen}{\small
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+EPSOut+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+EPSOn+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+resetEPS+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+EPSOff+}
+\index{GraphクラスのかんすうGraph@Graphクラスの関数!\verb+EPSAppend+}
+\verb|[Graph] Graph& EPSOn();|\\
+\verb|[Graph] Graph& EPSOff();|
+\begin{itemize}
+\item EPS出力のための情報を保存を開始(\verb|EPSOn|),　および停止(\verb|EPSOff|)
+する
+\end{itemize}
+\verb|[Graph] void resetEPS();|
+\begin{itemize}
+\item EPS出力のために保存されている情報を消去する。
+\end{itemize}
+\begin{verbatim}
+[Graph] void EPSOut(char* epsfname, 
+                    int lmargin=LEFT_MARGIN, int bmargin=BOTTOM_MARGIN);
+[Graph] void EPSAppend(ofstream& epsf, 
+                    int lmargin=LEFT_MARGIN, int bmargin=BOTTOM_MARGIN);
+\end{verbatim}
+\begin{itemize}
+\item 保存されているデータをEPS形式で新規ファイルに書き込む(\verb|EPSOut|)，
+  もしくは既存ファイルに追加(\verb|EPSAppend|)する。
+\item 引数epsfname (EPSOut)は出力ファイル名
+\item 引数epsf (EPSAppen)は出力ファイルストリーム
+\item 必要に応じて左マージン(lmargin),　下部マージン(bmargin)をdot数で
+  指定する。指定しなければデフォルト値として25がマージンとなる。
+\end{itemize}}
+\end{screen}
+
+EPSファイルの出力方法はサンプルプログラム\verb|sin.cc|を参考にしてくだ
+さい。
+
+\subsection{発展的な操作のための関数}
+
+\begin{screen}{\small
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+expose+}
+\index{XControllerクラスのかんすう@XControllerクラスの関数!\verb+expose+}
+\verb|[JWindow] JWindow&     expose();|\\
+\verb|[Xwin]    XController& expose( void );|
+\begin{itemize}
+\item XWinに対して用いた場合は，どれかのウィンドウがexposeされた時，
+JWindowに対して用いた場合は，そのウィンドウがexposeされた時
+にTrueを返す
+\end{itemize}
+%
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+getIndex+}
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+get_index+}
+\verb|[JWindow] int getIndex( void );|
+\begin{itemize}
+\item ウィンドウがjgrで管理されている何番目のウィンドウであるか(インデッ
+  クス)を返す
+\item JGR-2.xでの関数名: \verb|get_index();|
+\end{itemize}
+%
+\verb|[JWindow] Window getWindow( void );|
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+getWindow+}
+\index{JWindowクラスのかんすう@JWindowクラスの関数!\verb+get_window+}
+\begin{itemize}
+\item ウィンドウの情報をXlibのWindow構造体で返す
+\item JGR-2.xでの関数名: \verb|get_window();|
+\end{itemize}
+}
+\end{screen}
+
+\section{メニューについて}
+
+メニュー関連は上原さん(現東レ所属)の作成をしたものをもとに、手を加えたものです。
+感謝です。(注：以下の文書はとても古いもので、現状と一致しません。。。現
+在準備中です。)
+
+\subsection{メニューウィンドウ(Menu Class)について}
+
+class Menu のオブジェクトは、メニューの要素（アイテム)として
+ユーザー定義の処理関数とタイトルの組を受けとり、
+メニューウィンドウにタイトルを表示し、アイテムのタイトル
+部分がクリックされると該当する処理関数を呼びます。
+
+メニューウィンドウはウィンドウマネージャーの支配を受けます。
+
+Menu は、そのオブジェクトを宣言して直接メッセージを
+送ることにより使用します。
+
+Menu 自身はその内部にイベント待ちループを持っていません。
+
+タイトルは最大32文字で日本語は扱いません。
+処理関数としては \verb|void (*func)(Menu&)| 型の関数をとります。
+アイテムの数に制限はありません。アイテムの数を登録する
+必要もありません。
+
+ユーザーに公開するメソッドは以下の通りです。
+%
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addItem+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addSubmenu+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addClose+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addExit+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addItem+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+setTitle+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+setType+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+setStyle+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+open+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+map+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+unmap+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+act+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+close+}
+\begin{verbatim}
+  ・Menu& open(int x=0,int y=0);
+          働き  ：メニューウィンドウを開く。最初に宣言。
+          引数  ：メニューウィンドウの ルートでの位置 x,y
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& addItem(const char* title, void (*handler)(Menu&));
+          働き  ：メニューにアイテムを登録する。
+          引数  ：アイテムのタイトルの文字列へのポインタ title,
+                  処理関数へのポインタ handler
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& addSubmenu(const char* title, Menu& submenu, int type=Temporal));
+          働き  ：メニューにサブメニューを登録する。
+          引数  ：アイテムのタイトルの文字列へのポインタ title,
+                  サブメニューへのポインタ submenu,
+                  サブメニューのタイプ type (Temporal もしくは Static)
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& addClose(void);
+          働き  ：メニューをクローズするためのメニュー項目を追加する。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& addExit(void);
+          働き  ：プログラムを終了するためのメニュー項目を追加する。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& setTitle(const char* str);
+          働き  ：メニュー自体のタイトルを登録する。登録しなければタイトルは 'Menu' となる。
+          引数  ：タイトルの文字列へのポインタ str,
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& setType(int type=Static);
+          働き  ：メニューのタイプを決める
+          引数  ：メニュー項目を選んでもメニューを閉じないとき Static、
+                  メニュー項目のクリックがあったときメニューを閉じるなら
+                  Temporal
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& setStyle(int style=Separate) 
+          働き  ：メニューの概観を決める
+          引数  ：メニュー項目の間にしきりをいれるなら Separate, いれな
+                  いなら Flat を指定する。
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& map();  map(int x,int y); 
+          働き  ：メニューウィンドウをマップする。
+                  open() 以降で使用する。
+          引数  ：メニューウィンドウの ルートでの位置 x,y
+                  あるいは、なし
+                  （以前にマップした位置にマップする)
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& unmap();
+          働き  ：メニューウィンドウをアンマップする。
+                  open() 以降で使用する。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+          
+  ・Menu& act();
+          働き  ：マウスクリックをチェックし、クリックがあれば処理関数を呼ぶ。
+                  メインループ中で使用。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& close();
+          働き  ：メニューウィンドウを削除する。とくに明示的に呼ぶ必要はない。
+                  open() を呼べば再びメニューウィンドウは使える。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+\end{verbatim}
+%
+使い方の例は次節を参照して下さい。
+%
+%
+
+\subsection{入力ウィンドウについて}
+%
+以下の関数を呼ぶことによって、入力ウィンドウをメニュー項目として登録し、
+ユーザーから文字列あるいは数値を取得することができます。
+%
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addGetString+}
+\index{Menuクラスのかんすう@Menuクラスの関数!\verb+addGetValue+}
+\begin{verbatim}
+  ・Menu& addGetString(char* value, char* title, char* dflt);
+          働き  ：文字変数value に文字を入力する窓をメニュー項目としてつ
+                  くる。
+          引数  ：文字変数 value, value のデフォルト値 dflt, メッセージ title 
+          戻り値：当該オブジェクトの参照
+
+  ・Menu& addGetValue(double& value, char* title, double dflt);
+          働き  ：変数value に数値を入力する窓をメニュー項目としてつくる。
+          引数  ：変数 value, value のデフォルト値 dflt, メッセージ title 
+          戻り値：当該オブジェクトの参照
+\end{verbatim}
+%
+入力ウィンドウは、文字キー以外に、RET、BS、DEL、ESC、を受け付けます。
+ESC で入力ウィンドウをクリアします。マウスのボタンプレスは RET と
+同じ働きをします。
+
+各文字列の最大長は Menu の MAX\_STR\_LEN と同じです。
+
+\subsection{簡単な例}
+以下に使い方の例を示します。
+\begin{verbatim}
+//
+// メニューウィンドウ、入力ウィンドウの使い方の例
+//
+//   ３つのアイテムを持つメインメニューを開く。
+//   １つめのアイテムで入力を受け付けるための一時的なサブメニューを開く
+//     サブメニューの１つめのアイテムで、文字列を受け付ける。
+//     サブメニューの２つめのアイテムで、数値を受け付ける。
+//   ２つめのアイテムで変数を標準出力に表示するための静的なサブメニューを開く
+//     サブメニューの１つめのアイテムで、文字列を標準出力に出す。
+//     サブメニューの２つめのアイテムで、数値を標準出力に出す。
+//   ３つめのアイテムで終了する。
+//
+//
+#include <iostream.h>
+#include <stdlib.h>
+#include <jkit/jgr.h>
+
+Menu main_menu(Horizontal),
+        sub_menuA(Vertical,Static),
+        sub_menuB(Vertical,Static);
+
+char str[MAX_STR_LEN+1];
+//char str[256];
+double v;
+
+///////////////////////// サブメニューのためのハンドラ ////////////////////
+
+void handler_subB1(void* dummy){         //文字列を表示する
+  cout << "str= " << str << "\n";
+}
+void handler_subB2(void* dummy){         //数値を表示する
+  cout << "v= " << v << "\n";
+}
+
+////////////////////// メインルーチン //////////////////////
+
+int main(){
+  sub_menuA.open()
+          .addGetString(str,"Input string","aaaa")
+          .addGetValue(v,"Input value",10.0)
+          .addClose();
+
+  sub_menuB.open()
+          .addItem("string",handler_subB1)
+          .addItem("value", handler_subB2)
+          .addClose();
+
+  main_menu.open(100,50)
+          .addSubmenu("input",sub_menuA)
+          .addSubmenu("print",sub_menuB)
+          .addExit()
+          .map();
+
+  while(1) {main_menu.act();}                   // メインメニューを走らせる
+}
+\end{verbatim}
+このプログラム例は、sampleディレクトリに menu.cc という名前で置いてあり
+ます。
+%
+%
+
+\subsection{ウィンドウマネージャーに関する注意}
+%
+メニューウィンドウと入力ウィンドウはウィンドウマネージャーの
+支配を受けます。これらが開かれる際、アプリケーションが指定する
+ウィンドウ初期位置をウィンドウマネージャーに使用させるために、
+ウィンドウマネージャーの startup file で、そのことを指定して
+おかなければなりません。
+例えば、.twmrc で
+%
+\begin{verbatim}
+  UsePPosition "on"
+\end{verbatim}
+%
+という行を加えなければなりません。あるいは、
+%
+\begin{verbatim}
+  UsePPosition "non-zero"
+\end{verbatim}
+%
+としておけば、ウィンドウの位置を (0,0) と指定すると、
+open されてもすぐにはマップされず、マウスによって初期位置を
+決めることができます。
+%
+%
+%
+
+\section{FAQ}
+\textbf{[Q]}
+jgrでつくったウィンドウ上に他のウィンドウが重なると、
+描いてあった絵が消えてしまう。
+
+\begin{quote}
+backingstoreを有効にしましょう。
+backingstoreとは、あるウィンドウが他のウィンドウに隠されてしまったとき，
+書いてあった内容をメモリ内に保持するようにする設定です。
+この設定により，邪魔なウィンドウをどけたとき，下にあったはずの文字が消
+えてしまったりといったことが無くなります．
+
+エディターでファイル\verb|/etc/X11/xorg.conf|を開いて、Screenセクショ
+ン(ファイルの最後の方)に、以下のように一行追加してください。
+\begin{verbatim}
+      …
+Section "Screen"
+      …
+        Subsection "Display"
+                Depth       24
+                Modes       "1280x1024"
+        EndSubsection
+        Option "backingstore"            # ←追記
+EndSection
+\end{verbatim}
+
+この設定は、X Windowを起動し直すと有効になります。
+X Windowの再起動はログアウト後、コンソール画面上で以下を実行します。
+\begin{verbatim}
+      # init 3
+      # init 5
+\end{verbatim}
+グラフィカルのログイン画面がでてくればOKです．
+
+
+\end{quote}
+
+\section{問題点}
+バグもあるかもしれませんが、あったら教えて下さい。
+
+\addcontentsline{toc}{section}{索引}
+\printindex
+
+\end{document}
