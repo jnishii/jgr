@@ -1,0 +1,1937 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with jLaTeX2HTML 2002-2-1 (1.71) JA patch-1.9
+patched version by:  Kenshi Muto, Debian Project.
+* modified by:  Shige TAKENO
+LaTeX2HTML 2002-2-1 (1.71),
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>jgr</TITLE>
+<META NAME="description" CONTENT="jgr">
+<META NAME="keywords" CONTENT="jgr">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-2022-jp">
+<META NAME="Generator" CONTENT="jLaTeX2HTML v2002-2-1 JA patch-1.9">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="jgr.css">
+
+</HEAD>
+
+<BODY bgcolor="#ffffff">
+
+<DIV CLASS="navigation">
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   <BR>
+<BR> <P>
+</DIV>
+<!--End of Navigation Panel-->
+
+<P>
+
+<DIV ALIGN="CENTER">
+<BIG CLASS="XLARGE">Ｃ＋＋グラフィック・クラスライブラリＪＧＲの使い方 
+<BR><BIG CLASS="LARGE">(ＪＧＲ ｖｅｒ．３．ｘ準拠) </BIG></BIG>
+
+</DIV>
+<DIV ALIGN="RIGHT">
+平成20年10月7日版&nbsp;&nbsp;&nbsp;&nbsp;
+西井 淳
+
+</DIV>
+
+<P>
+
+<BR>
+
+<H2><A NAME="SECTION00010000000000000000">
+目次</A>
+</H2>
+<!--Table of Contents-->
+
+<UL CLASS="TofC">
+<LI><A NAME="tex2html45"
+  HREF="jgr.html#SECTION00020000000000000000">はじめに</A>
+<UL>
+<LI><A NAME="tex2html46"
+  HREF="jgr.html#SECTION00021000000000000000">jgr-3.xの変更点</A>
+<LI><A NAME="tex2html47"
+  HREF="jgr.html#SECTION00022000000000000000">jgr の特徴</A>
+<LI><A NAME="tex2html48"
+  HREF="jgr.html#SECTION00023000000000000000">動作環境</A>
+<LI><A NAME="tex2html49"
+  HREF="jgr.html#SECTION00024000000000000000">謝辞</A>
+<LI><A NAME="tex2html50"
+  HREF="jgr.html#SECTION00025000000000000000">ライセンス</A>
+<LI><A NAME="tex2html51"
+  HREF="jgr.html#SECTION00026000000000000000">その他の注意</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html52"
+  HREF="jgr.html#SECTION00030000000000000000">jgrの入手とインストール</A>
+<UL>
+<LI><A NAME="tex2html53"
+  HREF="jgr.html#SECTION00031000000000000000">jgrの入手</A>
+<LI><A NAME="tex2html54"
+  HREF="jgr.html#SECTION00032000000000000000">jgrのインストール</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html55"
+  HREF="jgr.html#SECTION00040000000000000000">jgr の使い方</A>
+<UL>
+<LI><A NAME="tex2html56"
+  HREF="jgr.html#SECTION00041000000000000000">ブログラミング時の注意</A>
+<LI><A NAME="tex2html57"
+  HREF="jgr.html#SECTION00042000000000000000">サンプルプログラム</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html58"
+  HREF="jgr.html#SECTION00050000000000000000">基本的な関数</A>
+<UL>
+<LI><A NAME="tex2html59"
+  HREF="jgr.html#SECTION00051000000000000000">ウィンドウを開く</A>
+<LI><A NAME="tex2html60"
+  HREF="jgr.html#SECTION00052000000000000000">グラフの初期化</A>
+<LI><A NAME="tex2html61"
+  HREF="jgr.html#SECTION00053000000000000000">ウィンドウにグラフを登録</A>
+<LI><A NAME="tex2html62"
+  HREF="jgr.html#SECTION00054000000000000000">ウィンドウの描画</A>
+<LI><A NAME="tex2html63"
+  HREF="jgr.html#SECTION00055000000000000000">グラフ描画に関する初期設定</A>
+<LI><A NAME="tex2html64"
+  HREF="jgr.html#SECTION00056000000000000000">その他初期化に関する関数</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html65"
+  HREF="jgr.html#SECTION00060000000000000000">いろいろな関数</A>
+<UL>
+<LI><A NAME="tex2html66"
+  HREF="jgr.html#SECTION00061000000000000000">ウィンドウ操作</A>
+<LI><A NAME="tex2html67"
+  HREF="jgr.html#SECTION00062000000000000000">マウス操作</A>
+<LI><A NAME="tex2html68"
+  HREF="jgr.html#SECTION00063000000000000000">座標軸関係の描画</A>
+<LI><A NAME="tex2html69"
+  HREF="jgr.html#SECTION00064000000000000000">グラフ・図形描画関数</A>
+<LI><A NAME="tex2html70"
+  HREF="jgr.html#SECTION00065000000000000000">色操作</A>
+<LI><A NAME="tex2html71"
+  HREF="jgr.html#SECTION00066000000000000000">フォント設定とテキスト操作</A>
+<LI><A NAME="tex2html72"
+  HREF="jgr.html#SECTION00067000000000000000">EPSファイルの出力</A>
+<LI><A NAME="tex2html73"
+  HREF="jgr.html#SECTION00068000000000000000">発展的な操作のための関数</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html74"
+  HREF="jgr.html#SECTION00070000000000000000">メニューについて</A>
+<UL>
+<LI><A NAME="tex2html75"
+  HREF="jgr.html#SECTION00071000000000000000">メニューウィンドウ(Menu Class)について</A>
+<LI><A NAME="tex2html76"
+  HREF="jgr.html#SECTION00072000000000000000">入力ウィンドウについて</A>
+<LI><A NAME="tex2html77"
+  HREF="jgr.html#SECTION00073000000000000000">簡単な例</A>
+<LI><A NAME="tex2html78"
+  HREF="jgr.html#SECTION00074000000000000000">ウィンドウマネージャーに関する注意</A>
+</UL>
+<BR>
+<LI><A NAME="tex2html79"
+  HREF="jgr.html#SECTION00080000000000000000">問題点</A>
+<LI><A NAME="tex2html80"
+  HREF="jgr.html#SECTION00090000000000000000">索引</A>
+</UL>
+<!--End of Table of Contents-->
+</SMALL>
+<P>
+
+<P>
+
+<H1><A NAME="SECTION00020000000000000000">
+はじめに</A>
+</H1>
+<H2><A NAME="SECTION00021000000000000000">
+jgr-3.xの変更点</A>
+</H2><SMALL CLASS="SMALL">
+以下はjgr-2.xから3.xへの主な変更点です。
+</SMALL>
+<UL>
+<LI>EPSルーチンの制御がコンパイルオプションで与えられていたのを
+関数による制御に変更。これによりグラフのどの部分をEPSに出力するか等
+細かな調整が可能になった。
+</LI>
+<LI>関数名の命名規則を統一した。ただしjgr-2.xまでの関数名でも利用出
+  来る。
+</LI>
+<LI>座標軸の目盛りのフォントとテキストのフォントを独立に設定可能に
+  (setScaleFont,setTextFont) 
+</LI>
+<LI>座標軸の色とグラフ等の図形の色独立に設定可能に
+</LI>
+<LI>ウィンドウの背景色設定用関数追加(setBgColor)
+</LI>
+<LI>サンプルプログラムの修正と追加
+</LI>
+</UL>
+<P>
+
+<H2><A NAME="SECTION00022000000000000000">
+jgr の特徴</A>
+</H2><SMALL CLASS="SMALL">
+JGRはX Window上でグラフィックを描くための C++ クラスライブラリです。
+複数のウインドウを管理でき, また, １つのウインドウ内に複数のグラフを
+管理できます。プログラムの実行中に随時計算結果をどんどんプロットしていき
+たい時に便利です。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">通常、グラフを描く時にはX軸の座標の単位系（例えばm,s)における値と
+グラフック画面上での値（ドット）が違いますが、このグラフィック・ツールでは
+X、Y軸の長さ、実際の値（m,sなど）と画面上での値（ドット）の関係などを
+はじめに与えておくことによって、あとは自動的に実際の値から座標変換を
+行なって点や線を描いてくれます。
+Xlib の関数を使ってますが, Xlib を意識せずに使用できます。
+表示結果はEPS形式で出力することもできます。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00023000000000000000">
+動作環境</A>
+</H2><SMALL CLASS="SMALL">
+C++をコンパイル出来, X Windowが動いてるシステム上なら動作すると思いま
+す。
+jgr-3.xはVine Linux 4.xとMac OS X(Leopard)上で動作確認しています。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00024000000000000000">
+謝辞</A>
+</H2><SMALL CLASS="SMALL">
+PS関連ルーチン(jgrPS.cc)は荻原剛志氏のXeasyGraphicをベースにして
+開発しています。大変感謝です。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00025000000000000000">
+ライセンス</A>
+</H2><SMALL CLASS="SMALL">
+PS関連ルーチン(jgrPS.cc)は XeasyGraphic-Copyright に、それ以外はLGPLと
+します。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00026000000000000000">
+その他の注意</A>
+</H2><SMALL CLASS="SMALL">
+バグレポート・パッチその他，西井
+(<code>nishii@bcl.sci.yamaguchi-u.ac.jp</code>)まで御連絡頂けますととても嬉しいです。
+</SMALL>
+<P>
+
+<H1><A NAME="SECTION00030000000000000000">
+jgrの入手とインストール</A>
+</H1>
+<H2><A NAME="SECTION00031000000000000000">
+jgrの入手</A>
+</H2><SMALL CLASS="SMALL">
+jgrは<TT><A NAME="tex2html1"
+  HREF="http://bcl.sci.yamaguchi-u.ac.jp/~jun/?JGR">http://bcl.sci.yamaguchi-u.ac.jp/~jun/?JGR</A></TT>から入手出来ます。
+Vine Linuxで使う場合はrpm形式のパッケージを，
+他の環境で使う場合はソースを入手してください。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00032000000000000000">
+jgrのインストール</A>
+</H2>
+<H3><A NAME="SECTION00032100000000000000">
+Vine Linuxの場合</A>
+</H3><SMALL CLASS="SMALL">
+rpmコマンドでインストールしてください。
+ダウンロードしたパッケージ名が
+<code>jgr-3.0-0vl1.i386.rpm</code>ならば以下を実行します．
+</SMALL><PRE>
+    # rpm -ivh jgr-3.0-0vl1.i386.rpm
+</PRE><SMALL CLASS="SMALL">
+サンプルプログラムやドキュメントは<code>/usr/share/doc/jgr-3.0</code>以下にインストールされます。
+インストールされたファイル一覧は以下で確認できます。
+</SMALL><PRE>
+    $ rpm -ql jgr
+</PRE>
+<P>
+
+<H3><A NAME="SECTION00032200000000000000">
+ソースからmakeする場合</A>
+</H3>
+<P>
+<SMALL CLASS="SMALL">Linux上の場合は以下のようにします。
+</SMALL><PRE>
+    # ln -sf Makefile.linux Makefile 
+    # make
+    # make -C doc
+    # make install
+</PRE><SMALL CLASS="SMALL">
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">Mac OSXの場合は以下の通り。
+</SMALL><PRE>
+    # ln -sf Makefile.mac Makefile
+    # 以下はLinuxの場合と同じ
+</PRE><SMALL CLASS="SMALL">
+</SMALL>
+<P>
+
+<H1><A NAME="SECTION00040000000000000000">
+jgr の使い方</A>
+</H1>
+<H2><A NAME="SECTION00041000000000000000">
+ブログラミング時の注意</A>
+</H2>
+<UL>
+<LI>jgrはCプログラムで使えますが，
+  コンパイルにはC++コンパイラ <code>g++</code> を使って
+ 下さい<A NAME="tex2html2"
+  HREF="#foot46"><SUP><SPAN CLASS="arabic">1</SPAN></SUP></A>。
+  CのプログラムのヘッダにC++の標準入出力ライブラリ(stream.h)を追加
+  すれば，g++でCプログラムもコンパイル出来ます。
+    <PRE>
+    #include &lt;stream.h&gt;
+</PRE>
+</LI>
+<LI>jgrを使うには、以下のヘッダファイルをincludeして下さい。
+  <PRE>
+    #include &lt;jkit/jgr.h&gt;
+</PRE>
+</LI>
+<LI>コンパイル時には libX11, libjgr をリンクして下さい。
+  <code>g++</code>のコンパイルオプションは、<code>-lX11 -ljgr</code> になります
+</LI>
+</UL><SMALL CLASS="SMALL">
+具体的なコンパイルの仕方は後の例を見て下さい. 
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00042000000000000000">
+サンプルプログラム</A>
+</H2>
+<P>
+<SMALL CLASS="SMALL">このプログラム例は、sampleディレクトリに tiny.cc という名前で置いてあり
+ます。サンプルプログラムのあるディレクトリで以下を実行すれば
+コンパイル出来ます。
+</SMALL><PRE>
+    make tiny
+</PRE><SMALL CLASS="SMALL">
+単に引数無しでmakeを実行するとサンプルプログラム全部がコンパイルされます。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL"><code>g++</code>を使うなら以下のようにします。
+</SMALL><PRE>
+    g++ -o tiny -lm -ljgr -L /usr/X11R6/lib -lX11 tiny.cc
+</PRE>
+<P>
+<SMALL CLASS="SMALL">以下はtiny.ccのソースです。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white">
+</SMALL><PRE>
+#include &lt;stream.h&gt;
+#include &lt;iostream.h&gt;
+#include &lt;jkit/jgr.h&gt;    //jgrクラスを使うのに必要
+
+JWindow win;             //開くウィンドウを宣言
+Graph   g;               //ウィンドウに描画するグラフを宣言
+
+main(){
+  extern JWindow win;             //開くウィンドウを宣言
+  extern Graph   g;               //ウィンドウに描画するグラフを宣言
+  double xmax, ymax;
+  char *msg="Click the Mouse, Please!!";
+  
+  // ウィンドウと、そこに描くグラフを登録-----------------------
+  win.open(10,10)  // ウィンドウを(10,10)の位置に開く宣言
+    .graph(g.open( 500, 50, 200, 40 )) 
+    // 開いたウィンドウに、x軸の正負方向が(500,50)、
+    //y軸の正負方向(200,40)のグラフを登録
+    .map()            // ウィンドウを画面上にマップする。
+    .mouseWait();    // マウス・クリックの入力を待つ
+  
+  //ここからは、グラフ g の属性設定------------------------------
+  xmax = 10.0;  ymax = 100.0;
+  g.setRatio( xmax, ymax, 500.0, 200.0 ) 
+    // xmax, ymax の値をそれぞれ、画面上では500dot, 200dotの長さで描画
+    .axis() // X軸, Y軸を描画
+    .text( 5, -15, msg )  // メッセージをグラフ上の(5,-15)の位置に出力
+    .flush()          // グラフィック・バッファにたまってるデータをフラッシュ
+    .mouseWait();    // マウス・クリックの入力を待つ
+  
+  //メインルーチン：グラフg上に線を書く.....
+  for( double i=1.0; i&lt;=xmax; i+=0.1 ){
+    g.color("blue") // グラフ g の描画色を青にする
+      .line( (double)i, 0.0, 0.0, (xmax-(double)i)*ymax/xmax )
+      // (i,0.0) から (0.0, (xmax-(double)i)*ymax/xmax)に線を引く
+      .flush();   
+    mouseBreak();  // マウス・クリックがあったらforループから抜ける
+  }
+  
+  g.color("black")
+    .text( 5, -15, msg) // テキスト表示
+    .mouseWait();      // マウス・クリックを待つ
+  Xwin.close();          // 終了の儀式
+}
+</PRE><SMALL CLASS="SMALL">
+</DIV><SMALL CLASS="SMALL">
+なんとなく tiny.cc がわかったら他のサンプルプログラムも見てみてください。
+以下はサンプルプログラムのリストです。
+</SMALL>
+<DIV ALIGN="CENTER"><TABLE CELLPADDING=3 BORDER="1">
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL">
+tiny.cc </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> 簡単なグラフを書く</SMALL></TD>
+</TR>
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL"> 
+sample.cc </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> tiny.ccに円や四角などの描画のルーチンを増やしたもの</SMALL></TD>
+</TR>
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL"> 
+sin.cc  </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> 複数の窓を開き、一つの窓には複数のグラフ描画。EPS出力も行う</SMALL></TD>
+</TR>
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL"> 
+mouse.cc </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> マウスのクリック情報を取得</SMALL></TD>
+</TR>
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL"> 
+font.cc </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> 各種フォントの表示</SMALL></TD>
+</TR>
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL"> 
+tinymenu.cc </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> メニューの利用例</SMALL></TD>
+</TR>
+<TR><TD ALIGN="CENTER"><SMALL CLASS="SMALL"> 
+menu.cc </SMALL></TD>
+<TD ALIGN="LEFT"><SMALL CLASS="SMALL"> メニューの利用例2</SMALL></TD>
+</TR>
+</TABLE></DIV>
+<P>
+<SMALL CLASS="SMALL">プログラムに用いられる各関数の詳細は以降の節で紹介します。
+</SMALL>
+<P>
+
+<H1><A NAME="SECTION00050000000000000000">
+基本的な関数</A>
+</H1><SMALL CLASS="SMALL">
+この節では、ウィンドウやそこに描画するグラフを初期化する関数について、
+ほぼプログラム内で宣言する順番で紹介して行きます。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00051000000000000000">
+ウィンドウを開く</A>
+</H2>
+<DIV STYLE="border: inset blue; background-color: white">
+<SMALL CLASS="SMALL"><A NAME="69"></A>
+</SMALL></SMALL><PRE>
+JWindow&amp; open( unsigned int sx, unsigned int sy, 
+              unsigned int width, unsigned int height, int bsflag=True );
+JWindow&amp; open( unsigned int sx, unsigned int sy, int bsflag=True );
+</PRE><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+  </SMALL></SMALL>
+<UL>
+<LI><code>(sx,sy)</code>: 左上の角の座標、原点は画面の左上の角
+</LI>
+<LI><code>(width,height)</code>: ウィンドウの幅と高さ
+</LI>
+<LI><code>bsflag</code>: バッキングストアを使うかどうか(指定がなければ''使う'')
+  
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">ウィンドウのクラス名は <code>JWindow</code> です。例えば2つウィンドウを開きた
+いときには、
+</SMALL><PRE>
+    JWindow win1, win2;
+</PRE><SMALL CLASS="SMALL">
+と宣言します。さらに、このウィンドウの大きさや位置を以下のように指定します。
+</SMALL>
+<UL>
+<LI>大きさと位置両方を指定するとき、
+<PRE>
+    win1.open(10,10,200,100); //座標(10,10)を左上の角とし、幅200dot,高さ100dot
+</PRE>
+</LI>
+<LI>位置のみ指定し、大きさは登録するグラフの大きさに応じて自動的に決め
+  る時。
+<PRE>
+    win1.open(10,10); //座標(10,10)を左上の角とする
+</PRE>
+</LI>
+</UL><SMALL CLASS="SMALL">
+最後の引数のbsflagは、バッキングストアの指定を付け加えたいときに
+<code>True</code> を，不要な時には<code>False</code> を指定します。
+(よくわからなければこの引数は不要です)
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00052000000000000000">
+グラフの初期化</A>
+</H2><SMALL CLASS="SMALL">
+<A NAME="84"></A>
+<A NAME="85"></A>
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white"></SMALL><PRE>
+Graph&amp;  open(int sx, int sy, int x_pos, int x_neg, int y_pos, int y_neg,
+            char* clr="black" );
+Graph&amp;  open( int x_pos, int x_neg, int y_pos, int y_neg, 
+            char* clr="black" );
+Graph&amp;  open( Graph&amp; g, char* clr="black" );
+Graph&amp;  child( Graph&amp; g );
+Graph&amp;  child( Graph&amp; g, char* clr );
+</PRE><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+  </SMALL></SMALL>
+<UL>
+<LI><code>(sx,sy)</code>: グラフの左上の角の座標、原点はウィンドウの左上の角
+</LI>
+<LI><code>x_pos,x_neg</code>: X軸の正方向・負方向の長さ
+</LI>
+<LI><code>y_pos,y_neg</code>: Y軸の正方向・負方向の長さ
+</LI>
+<LI><code>clr</code>: グラフの描画色 ("red","blue" など X windowで使える
+    色名を指定)。指定しなければ黒に設定される。
+  
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">グラフのクラス名は <code>Graph</code> です。それぞれのグラフについて宣言を以下
+のように行います。例えば２つグラフを書きたいときには(１つのウィンドウ上
+であっても、３つのウィンドウそれぞれに書くのであっても)、
+</SMALL><PRE>
+    Graph grp1, grp2 ,grp3;
+</PRE><SMALL CLASS="SMALL">
+と宣言します。次に、これらのグラフの初期化を行います。
+</SMALL>
+<UL>
+<LI>ウィンドウ中でのグラフの位置、大きさを指定するとき
+<BR>例えば、ウィンドウ中、(10,10)の位置にX軸の正負の方向の長さがそれぞれ
+100,10, Y軸の正負の方向の長さがそれぞれ 50,10 のグラフを書きたいときには
+<PRE>
+    grp1.open(10,10,100,10,50,10);
+</PRE>
+とします
+</LI>
+<LI>ウィンドウ中でのグラフの大きさだけ指定して、位置は自動で決める場合
+  には以下のようにします。
+<PRE>
+    grp2.open(100,10,50,10);   //大きさはgrp1と同じ場合の例
+</PRE>
+</LI>
+<LI>あるグラフと同じ大きさのグラフを書きたい時には、
+<PRE>
+    grp3.open(grp2);
+</PRE>
+とします。この例では grp3 の大きさは grp2 と同じになり、位置は自動で決められます.
+</LI>
+</UL><SMALL CLASS="SMALL">
+いずれの場合にも、描画色の指定をしたいときには、さらに
+<code>"red"</code>, <code>"blue"</code>などを指定した引数を加えてください。この指定
+は
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="103"></A>
+</SMALL></SMALL><PRE>
+Graph&amp;  color( char* clr="black" );
+</PRE><SMALL CLASS="SMALL">
+</DIV><SMALL CLASS="SMALL">
+を使って、いつでも変更できます。
+色指定についての詳細は<A HREF="#sec:Color">5.5</A>節を見てください。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">さらに、あるグラフ(親グラフ)と<SPAN  CLASS="textbf">同じ位置に重ねてグラフ(子グラフ, child graph)を書きたいとき</SPAN>には、
+子グラフの初期化に<code>child</code>を使います。(１つのグラフに複数のデータ曲線を書く時などに使います)。
+例えば、子グラフ grp3 を 親グラフ grp2 と同じ位置に描く時、
+</SMALL><PRE>
+    grp3.child(grp2);
+</PRE><SMALL CLASS="SMALL">
+とします。
+子グラフの描画色は、それぞれ異なる色が自動的に選ばれます。
+自分で色の設定をしたいときには、
+</SMALL><PRE>
+    grp3.child(grp2,"blue");
+</PRE><SMALL CLASS="SMALL">
+と、色の指定を加えます。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00053000000000000000">
+ウィンドウにグラフを登録</A>
+</H2>
+<P>
+<DIV STYLE="border: inset blue; background-color: white">
+<SMALL CLASS="SMALL"><A NAME="115"></A>
+</SMALL></SMALL><PRE>
+  JWindow&amp; graph( Graph&amp; g );
+</PRE><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">前節で初期化したグラフを、描画するウィンドウに登録します。
+例えば、グラフ<code>grp1</code>をウィンドウーー<code>win1</code>に描きたい場合には、
+</SMALL><PRE>
+    win1.graph(grp1);
+</PRE><SMALL CLASS="SMALL">
+とします。また、grp1の初期化とあわせて、
+</SMALL><PRE>
+    win1.graph(grp1.open(100,10,50,10));
+</PRE><SMALL CLASS="SMALL">
+などとすることもできます。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00054000000000000000">
+ウィンドウの描画</A>
+</H2>
+<DIV STYLE="border: inset blue; background-color: white">
+<SMALL CLASS="SMALL"><A NAME="125"></A>
+</SMALL></SMALL><PRE>
+    JWindow&amp; map( void );
+</PRE><SMALL CLASS="SMALL">
+</DIV><SMALL CLASS="SMALL">
+ウィンドウにグラフの登録がすんだところで、ウィンドウをいよいよ
+Xウィンドウ上に描画します。単に
+</SMALL><PRE>
+    win1.map();
+</PRE><SMALL CLASS="SMALL">
+とするだけです。ただし、これだけだと X window の処理の問題上
+データがグラフィックバッファに入るだけですぐに描画されない時があります。
+そのときには、以下の命令をmapコマンドのあとに入れてください。
+<A NAME="131"></A>
+</SMALL><PRE>
+   win1.flush();
+</PRE><SMALL CLASS="SMALL">
+これで、バッファにたまっているデータがすべて描写されます。
+なおこの命令は、jgr のデフォルトで定義される画面制御のための
+クラス Xwin の関数(<A HREF="#sec:XwinWindow"><IMG  ALIGN="BOTTOM" BORDER="1" ALT="[*]" SRC="crossref.png"></A>節)により、
+<A NAME="135"></A>
+</SMALL><PRE>
+   Xwin.flush();
+</PRE><SMALL CLASS="SMALL">
+を用いるのと等価です。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00055000000000000000">
+グラフ描画に関する初期設定</A>
+</H2>
+<P>
+<DIV STYLE="border: inset blue; background-color: white">
+<SMALL CLASS="SMALL">  <A NAME="140"></A>
+  <A NAME="141"></A>
+</SMALL></SMALL><PRE>
+Graph&amp; setRatio( double realx, double realy, double scrx, double scry );
+Graph&amp; setRatio( Graph&amp; g );
+Graph&amp; setRatio( void );
+</PRE><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+  </SMALL></SMALL>
+<UL>
+<LI>(realx, realy): 実際の数値
+</LI>
+<LI>(scrx, scry): スクリーン上での値(ドット)
+</LI>
+<LI>jgr-2.xでの関数名: <code>set_ratio</code>
+  
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">計算で得られる数値の大きさと、画面上での大きさの関係を設定します。
+例えば、グラフgrp1上で、X軸の時間 10s を画面上で100dot、Y軸の速度 5m/s
+を画面上で60dotで表したい時には、
+</SMALL><PRE>
+    grp1.setRatio(10,5,100,60);
+</PRE><SMALL CLASS="SMALL">
+とします。また grp2 での設定は grp1 と同じにしたい時には、
+</SMALL><PRE>
+    grp1.setRatio(grp2);
+</PRE><SMALL CLASS="SMALL">
+さらに、グラフを重ねて描画しているchildグラフの場合には単に
+</SMALL><PRE>
+    grp3.setRatio();
+</PRE><SMALL CLASS="SMALL">
+とすれば、親グラフと同じ設定になります。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">この関数の設定後、線などを描画する時の座標の入力は、スクリーン上での大き
+さを気にすることなく、ただ、(時間、速度)といった実際の値を入力すれば
+描画ができます。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">なお、この関数を宣言しない時の、スクリーン上の値と実際の値の比は
+1:1に設定されています。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00056000000000000000">
+その他初期化に関する関数</A>
+</H2>
+<DIV STYLE="border: inset blue; background-color: white">
+<SMALL CLASS="SMALL"><A NAME="155"></A>
+</SMALL></SMALL><PRE>
+JWindow&amp; addLeftMargin(long xmargin);
+</PRE><SMALL CLASS="SMALL">
+</DIV><SMALL CLASS="SMALL">
+ウィンドウに位置の自動割当でグラフを書いたとき、
+グラフの左にマージンがもうすこし欲しい場合に使う クラスJWindowの関数です.
+ウィンドウのmap前に指定してください。
+</SMALL>
+<P>
+
+<H1><A NAME="SECTION00060000000000000000">
+いろいろな関数</A>
+</H1>
+<P>
+<SMALL CLASS="SMALL">各ウィンドウの操作には JWindow クラスのメンバー関数を使います。
+画面上に作ったウィンドウには複数のグラフを登録して描画することができ，
+各グラフの操作には Graph クラスのメンバー関数を使います。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">また，すべてのウィンドウの操作のために、XController というクラスがデフォルトで
+定義されています。
+以下の宣言が<code>jgr.h</code>でされており，変数Xwinに対してメンバー
+関数を呼び出す事で，全てのウィンドウに対するいくつかの操作を行うことが
+できます。
+</SMALL><PRE>
+    XController Xwin;
+</PRE>
+<P>
+<SMALL CLASS="SMALL">以下ではJWindow,Graphクラスや，変数Xwinに対して使えるいろいろなメンバー
+関数を紹介します。
+各関数がどのクラスや変数に対するものかは各関数名の前に[]で囲って記して
+います。
+複数のクラスに対して同じ名前のメンバー関数がある場合，特に明記していな
+い限りその関数は，どのクラスに対しても同じ動作をします。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00061000000000000000">
+ウィンドウ操作</A>
+</H2>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL">    <A NAME="164"></A>
+    <A NAME="165"></A>
+    <code>[JWindow] JWindow&amp; map( void );</code>
+<BR>    <code>[JWindow] JWindow&amp; unmap( void );</code>
+    </SMALL></SMALL>
+<UL>
+<LI>ウィンドウを画面上にマップ(表示)する(<code>map</code>)，
+      もしくはアンマップ(非表示)する(<code>unmap</code>)。
+    
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+    <A NAME="168"></A>
+    <code>[Xwin] void close( void );</code>
+    </SMALL></SMALL>
+<UL>
+<LI>ウィンドウ全てを閉じる。<SPAN  CLASS="textbf">jgr終了時にかならず実行して
+        ください。</SPAN>
+    
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+    <A NAME="172"></A>
+    <A NAME="173"></A>
+    <code>[JWindow] JWindow&amp; clear( void ); </code>
+<BR>    <code>[Graph]   Graph&amp;   clear( void );</code>
+    </SMALL></SMALL>
+<UL>
+<LI>ウィンドウ内を消去し，ウィンドウ上の全てのグラフのラストポイント
+      を消去する。
+    
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+    <A NAME="176"></A>
+    <A NAME="177"></A>
+    <A NAME="178"></A>
+    <code>[JWindow] JWindow&amp; flush( void );</code>
+<BR>    <code>[Graph]   Graph&amp;   flush( void );</code>
+<BR>    <code>[Xwin]    XController&amp; flush( void );</code>
+    </SMALL></SMALL>
+<UL>
+<LI>ウィンドウ用のメモリバッファをフラッシュ(メモリバッファ上のデータを画
+      面上に出力)する。
+    
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+    <A NAME="181"></A>
+    <code>[Xwin] XController&amp; sync( void );</code>
+    </SMALL></SMALL>
+<UL>
+<LI>ウィンドウをシンクする。
+    
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+
+<H2><A NAME="SECTION00062000000000000000">
+マウス操作</A>
+</H2>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="187"></A>
+<A NAME="188"></A>
+<A NAME="189"></A>
+<A NAME="190"></A>
+<A NAME="191"></A>
+<A NAME="192"></A>
+<code>[JWindow,Graph,Xwin] int mousePress( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>Xwinに対して呼び出した場合はいずれかのウィンドウに対して，
+  JWindowもしくはGraphに対して呼び出した場合はそのウィンドウに対して
+  マウスクリックを検出したときTrueを，それ以外のときFalseを返す。
+</LI>
+<LI>JGR-2.xでの関数名: <code>mouse_press;</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[JWindow,Graph] int mousePress( XEvent &amp;ev );</code>
+</SMALL></SMALL>
+<UL>
+<LI>グラフのあるウィンドウへのマウス入力があるとTrueを返す。
+また、取得したマウスイベント情報を変数evに代入する
+</LI>
+<LI><code>XEvent</code>はXlibに用意されている構造体です。
+</LI>
+<LI>JGR-2.xでの関数名: <code>mouse_press;</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="197"></A>
+<A NAME="198"></A>
+<A NAME="199"></A>
+<A NAME="200"></A>
+<A NAME="201"></A>
+<A NAME="202"></A>
+<code>[Xwin,JWindow,Graph,NONE] double ev2button(XEvent &amp;ev);</code>
+</SMALL></SMALL>
+<UL>
+<LI>mousePress()で取得したマウスイベント変数evを引数として、マウスのどのボタンがクリッ
+  クされたかを返す。
+</LI>
+<LI>ev2button は Xwin, JWindow, Graphの メンバ関数として呼びだすことも, 
+  単独の関数として呼び出すこともできます。
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] double ev2x(XEvent &amp;ev);</code>
+<BR><code>[Graph] double ev2y(XEvent &amp;ev);</code>
+</SMALL></SMALL>
+<UL>
+<LI>マウスイベント変数evを引数として、マウスクリックがクリックされた座標値x,yを返す。
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="207"></A>
+<A NAME="208"></A>
+<A NAME="209"></A>
+<A NAME="210"></A>
+<A NAME="211"></A>
+<A NAME="212"></A>
+<code>[JWindow] JWindow&amp;     mouseWait();</code>
+<BR><code>[Graph]   Graph&amp;       mouseWait();</code>
+<BR><code>[Xwin]    XController&amp; mouseWait();</code>
+</SMALL></SMALL>
+<UL>
+<LI>JWindowもしくはGraphに対して呼び出した時はそのウィンドウへ，Xwinに対し
+  て呼び出した時はいずれかのウィンドウへのマウス入力があるまで待つ。
+</LI>
+<LI>JGR-2.xでの関数名: <code>mouse_wait();</code>
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">以下はマウス関数の使用例です。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white"></SMALL><PRE>
+JWindow win;
+Graph g;
+XEvent ev;
+
+win.open(10,10)
+   .graph(g.open(...));
+...
+
+// マウスがクリックされるまで待つ。win.mouseWait(ev); としても等価
+g.mouseWait(ev); 
+
+//どのボタンがクリックかを表示。以下のように呼び出すこともできる。
+//Xwin.ev2button(ev); win.ev2button(ev); g.ev2button(ev); 
+printf("押されたボタンは %d\n",ev2button(ev));
+
+printf("クリック位置は(%lf,%lf)\n", g.ev2x(ev), g.ev2y(ev));
+</PRE><SMALL CLASS="SMALL">
+</DIV><SMALL CLASS="SMALL">
+サンプルプログラム<code>sample.cc</code>も見てください。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00063000000000000000">
+座標軸関係の描画</A>
+</H2>
+<P>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="222"></A>
+<A NAME="223"></A>
+<A NAME="224"></A>
+<A NAME="225"></A>
+<A NAME="226"></A>
+<A NAME="227"></A>
+<A NAME="228"></A>
+<A NAME="229"></A>
+</SMALL></SMALL><PRE>
+[Graph] Graph&amp;  setXScaleFull( int flag=True );
+[Graph] Graph&amp;  setYScaleFull( int flag=True );
+[Graph] Graph&amp;  setScaleFull( int flag=True );
+</PRE><SMALL CLASS="SMALL"></SMALL>
+<UL>
+<LI>x軸(<code>setXScaleFull</code>), y軸(<code>setYScaleFull</code>),もしくは両者(<code>setScaleFull</code>)の
+目盛刻みを高さ一杯にする
+</LI>
+<LI>jgr-2.xでの関数名: <code>set_xscale_full</code>,
+  <code>set_yscale_full</code>, <code>set_scale_full</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp;  setAxisWithDigit( int flag=True );</code>
+</SMALL></SMALL>
+<UL>
+<LI>座標軸には数値付き目盛をつける
+</LI>
+<LI>jgr-2.xでの関数名: <code>set_axis_with_digit</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="236"></A>
+<A NAME="237"></A>
+<code>[Graph] Graph&amp;  axis( void );</code>
+<code>[JWindow] JWindow&amp; axis( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>座標軸を書く
+</LI>
+<LI>Jwindowに対して適用した場合はウィンドウ上の全てのグラフの座標軸を描く
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="240"></A>
+<A NAME="241"></A>
+<code>[Graph] Graph&amp;  axisBox( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>枠で囲んだ座標軸を書く
+</LI>
+<LI>jgr-2.xでの関数名: <code>axis_box( void );</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="244"></A>
+<A NAME="245"></A>
+<code>[Graph] Graph&amp;  xaxis( double blank );</code>
+<BR><code>[Graph] Graph&amp;  yaxis( double blank );</code>
+<BR><code>[Graph] Graph&amp;  xaxis( void );</code>
+<BR><code>[Graph] Graph&amp;  yaxis( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI><code>xaxis()</code>はx座標軸を，<code>yaxis()</code>はy座標軸を書く
+</LI>
+<LI>間隔blankで座標軸の刻みを書く
+</LI>
+<LI>間隔blankを指定しなければ間隔は自動で決まる
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">もし、グラフgrpに関して
+</SMALL><PRE>
+    grp.axis();
+</PRE><SMALL CLASS="SMALL">
+とすると、
+<BR>
+<IMG
+ WIDTH="96" HEIGHT="64" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.png"
+ ALT="\begin{picture}(70,40)
+\put(10,20){\line(1,0){60}}
+\put(40,0){\line(0,1){40}}
+\end{picture}">
+<BR>
+という感じの座標軸が書かれます。また、
+</SMALL><PRE>
+    grp.axisBox();
+</PRE><SMALL CLASS="SMALL">
+とすると、
+<BR>
+<IMG
+ WIDTH="96" HEIGHT="74" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.png"
+ ALT="\begin{picture}(70,40)
+\put(10,20){\line(1,0){60}}
+\put(40,0){\line(0,1){40}}
+\put(10,0){\framebox{(}60,40)}
+\end{picture}">
+<BR>
+となります。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">X軸だけ、もしくはY軸だけ書きたいときには、
+</SMALL><PRE>
+    grp.xaxis( 1.0 ); //目盛の刻み幅を1.0にして、
+    grp.yaxis( 0.1 ); //目盛の刻み幅を0.1にして、Y軸を書く
+    grp.xaxis();      // X軸を書く
+    grp.yaxis();      // Y軸を書く
+</PRE><SMALL CLASS="SMALL">
+などとします。目盛の刻み幅の指定をしていないときには、目盛は自動設定にな
+ります。目盛をグラフ一杯の長さにしたい時には、
+<code>setScaleFull()</code>や<code>setXScaleFull()</code>、<code>setYSCaleFull()</code>を使って、
+</SMALL><PRE>
+    grp.setXScaleFull()
+       .axis();
+</PRE><SMALL CLASS="SMALL">
+などとします。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">目盛に数値を表示したいときには、
+</SMALL><PRE>
+    grp.setAxisWithDigit()
+       .axis();
+</PRE><SMALL CLASS="SMALL">
+と、<code>setAxisWithDigit()</code>を使います。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00064000000000000000">
+グラフ・図形描画関数</A>
+</H2>
+<P>
+
+<H3><A NAME="SECTION00064100000000000000">
+直線を描く</A>
+</H3>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="271"></A>
+<A NAME="272"></A>
+<A NAME="273"></A>
+<code>[Graph] Graph&amp;  line(double x, double y, double x2, double y2);</code>
+<BR><code>[Graph] Graph&amp;  dashLine( double x, double y, double x2, double y2 );</code>
+</SMALL></SMALL>
+<UL>
+<LI>(x,y)と(x2,y2)を直線もしくは点線で結ぶ
+</LI>
+<LI>Vine-2.xでの関数名: <code>dash_line();</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp;  line(double x, double y);</code>
+<BR><code>[Graph] Graph&amp;  dashLine( double x2, double y2 );</code>
+</SMALL></SMALL>
+<UL>
+<LI>ラストポイントと(x,y)を直線もしくは点線で結ぶ
+</LI>
+<LI>ラストポイントが設定されて無い時は(x,y)をラストポイントとする
+</LI>
+<LI>Vine-2.xでの関数名: <code>dash_line();</code>
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">各グラフで最後に描いた点はラストポイントとして記憶されています。
+折れ線グラフを描く時にはこれを利用すると楽です。
+例えば(1,1), (2,1), (3,4)を結ぶ線を描く方法です。
+</SMALL><PRE>
+    Graph g;
+    ....
+    g.line(1,1,2,1).line(2,1,3,4); // ラストポイントを使わない場合
+    g.line(1,1).(2,1).(3,4);       // ラストポイントを使った場合
+</PRE><SMALL CLASS="SMALL">
+<SPAN CLASS="MATH"><IMG
+ WIDTH="54" HEIGHT="39" ALIGN="MIDDLE" BORDER="0"
+ SRC="img3.png"
+ ALT="$y=x^2$"></SPAN>のグラフは以下のように描くことができます。
+</SMALL><PRE>
+    for(x=-10;x&lt;=10;x++) g.line(x,x*x);
+</PRE>
+<P>
+<SMALL CLASS="SMALL">ラストポイントを消去したい時には以下の関数を使います。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white">
+<SMALL CLASS="SMALL"><A NAME="284"></A>
+<A NAME="285"></A>
+<code>[Graph] Graph&amp; forgetLastPoint(void);</code>
+<BR><code>[Graph] Graph&amp; forget(void);</code>
+</SMALL></SMALL>
+<UL>
+<LI>ラストポイントの消去(<code>forget</code>は<code>fotgetLastPoint</code>の別名)
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">直線の属性を変更したい時には以下の関数を使います。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="290"></A>
+<A NAME="291"></A>
+<A NAME="292"></A>
+<A NAME="293"></A>
+<A NAME="294"></A>
+<A NAME="295"></A>
+<code>[Graph] Graph&amp; setLineSolid( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>直線の属性を実線に変更
+</LI>
+<LI>jgr-2.xでの関数名: <code>set_solid_line();</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp; setLineDash( void );</code>
+<BR><code>[Graph] Graph&amp; setLineDDash( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>直線の属性を点線もしくは二点鎖線に変更
+</LI>
+<LI>jgr-2.xでの関数名: <code>set_dash_line();</code>, <code>set_double_dash_line();</code>
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+
+<H3><A NAME="SECTION00064200000000000000">
+その他の図形</A>
+</H3>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="303"></A>
+<A NAME="304"></A>
+<A NAME="305"></A>
+<A NAME="306"></A>
+<A NAME="307"></A>
+<A NAME="308"></A>
+<A NAME="309"></A>
+<A NAME="310"></A>
+<A NAME="311"></A>
+<code>[Graph] Graph&amp;  pset(double x, double y);</code>
+</SMALL></SMALL>
+<UL>
+<LI>(x,y)に点をうつ
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp;  rectangle( double x, double y, double width, double height );</code>
+<BR><code>[Graph] Graph&amp;  fillRectangle( double x, double y, double width, double height );</code>
+</SMALL></SMALL>
+<UL>
+<LI>左上が(x,y)になる位置に(width,height)の四角形を描く
+</LI>
+<LI><code>fillRectangle</code>の場合は四角形の中を塗りつぶす
+</LI>
+<LI>Vine-2.xでの関数名: <code>fill_rectangle</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp;  cross( double x, double y, double r );</code>
+</SMALL></SMALL>
+<UL>
+<LI>中心が(x,y)のクロスを描く。
+</LI>
+<LI>クロスの長さがr(x軸方向の長さで指定)
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp;  circle( double x, double y, double r );</code>
+<BR><code>[Graph] Graph&amp;  fillCircle( double x, double y, double r );</code>
+</SMALL></SMALL>
+<UL>
+<LI>中心が(x,y)、半径r(x軸方向の長さで指定)の円を描く
+</LI>
+<LI><code>filCircle</code>の場合四角形のは中を塗りつぶす
+</LI>
+<LI>Vine-2.xでの関数名: <code>fill_circle</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] Graph&amp;  poly( double x, double y );</code>
+<BR><code>[Graph] Graph&amp;  closePoly( double x, double y );</code>
+<BR><code>[Graph] Graph&amp;  fillPoly( double x, double y );</code>
+</SMALL></SMALL>
+<UL>
+<LI>点(x,y)を結ぶ多角形を描く
+</LI>
+<LI>最後の点はfillPolyかclosePolyで指定。fillPolyなら中はぬりつぶさ
+  れる。
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">以下はpolyを使って(0,0), (10,0), (5,5)を結んだ三角形を描く例です。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white">
+</SMALL><PRE>
+   Graph g;
+   g.poly(0,0)
+    .poly(10,0)
+    .fillPoly(5,5); //塗りつぶさないならclosePolyを使う
+</PRE><SMALL CLASS="SMALL">
+</DIV>
+<P>
+
+<H2><A NAME="SECTION00065000000000000000"></A><A NAME="sec:Color"></A>
+<BR>
+色操作
+</H2>
+<P>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="329"></A>
+<A NAME="330"></A>
+<code>[Graph] Graph&amp;  setFGColor( char* clr="black" );</code>
+<BR><code>[Graph] Graph&amp;  color( char* clr="black" );</code>
+</SMALL></SMALL>
+<UL>
+<LI>前景色指定(グラフ等の図形の絵の色)
+</LI>
+<LI>colorはsetFGcolorの別名です。
+</LI>
+<LI>指定色は以下から選べます。
+  <BLOCKQUOTE>
+"black", "blue", "red", "yellow", "green", "cyan","magenta", "brown", 
+<BR>"lightgray", "darkgray", "lightblue", "lightgreen", "lightcyan",
+<BR>"lightred", "lightmagenta"
+  
+</BLOCKQUOTE>
+</LI>
+<LI>例) <code>g.color("red")</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="335"></A>
+<code>[Graph] Graph&amp;  setAxisColor( char* clr="black" );</code>
+</SMALL></SMALL>
+<UL>
+<LI>座標軸の色指定(デフォルトは黒)
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="338"></A>
+<A NAME="339"></A>
+<code>[Graph] Graph&amp;  pushColor( char* clr="black" );</code> 
+<BR><code>[Graph] Graph&amp;  popColor();</code> 
+</SMALL></SMALL>
+<UL>
+<LI>前景色を変更し、古い色は保存しておく(pushColor)。
+</LI>
+<LI>popColorは前景色を元の色に戻す
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="342"></A>
+<code>[JWindow] JWindow&amp; setBgColor(char *bgclr);</code>
+</SMALL></SMALL>
+<UL>
+<LI>ウィンドウの背景色を変更する。
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">色の設定例はサンプルプログラム<code>sin.cc</code>などを見てください。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00066000000000000000">
+フォント設定とテキスト操作</A>
+</H2>
+<P>
+<SMALL CLASS="SMALL">以下はフォント設定のための関数です。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="348"></A>
+<A NAME="349"></A>
+<A NAME="350"></A>
+<A NAME="351"></A>
+<code>[JWindow] JWindow&amp;  setTextFont( int ftype, int fstyle, int size );</code>
+<code>[Graph]   Graph&amp;    setTextFont( int ftype, int fstyle, int size );</code>
+<BR><code>[JWindow] JWindow&amp;  setScaleFont( int ftype, int fstyle, int size );</code>
+<code>[Graph]   Graph&amp;    setScaleFont( int ftype, int fstyle, int size );</code>
+</SMALL></SMALL>
+<UL>
+<LI>関数textで表示する文字フォントの設定(<code>setTextFont</code>)，およ
+  び座標軸ラベルのフォント設定(<code>setScaleFont</code>)
+</LI>
+<LI><code>ftype</code>はフォントの種類。以下の値を設定出来る。
+  <BLOCKQUOTE>
+Courier, Helvetica, Times, Symbol
+  
+</BLOCKQUOTE>
+</LI>
+<LI><code>fstyle</code>はフォントのスタイル。以下の値を設定出来る。
+  <BLOCKQUOTE>
+Roman, Bold, Italic, Oblique
+  
+</BLOCKQUOTE>
+</LI>
+<LI><code>size</code>はフォントの大きさ。以下の値を設定出来る。
+  <BLOCKQUOTE>
+8,10,11,12,14,17,18,20,24,25,34
+  
+</BLOCKQUOTE>
+</LI>
+<LI>JWindowに対して呼び出した場合には，ウィンドウ登録されるグラフの
+  テキストフォントのデフォルト値を設定出来ます。この場合上記の関数はウィ
+  ンドウのmapより前に実行してください。設定値はウィンドウのmap時に各グ
+  ラフのフォントに設定されます。
+</LI>
+<LI>Graphクラスに対して呼び出した場合は, 個々のグラフのフォントを個
+  別に変更します。
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">以下はテキスト表示の関数です。
+</SMALL>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="362"></A>
+<code>[Graph] Graph&amp; text( double x, double y, char *msg, int position=Center);</code>
+</SMALL></SMALL>
+<UL>
+<LI>文字列msgを位置(x,y)に書く。
+</LI>
+<LI>位置(x,y)は文字の中心位置がデフォルト。引数positionで指定位置を
+  以下から選ぶことができる。
+<BLOCKQUOTE>
+Left, Center, Right, LeftTop, CenterTop, RightTop, RightCenter 
+
+</BLOCKQUOTE>
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">以下はテキストの表示例です。
+</SMALL><PRE>
+    Graph g;
+    ...
+    g.text(50,0,"Hello!");          //"Hello"と表示. 文字列の中心位置が(50,0)
+    g.setTextFont(Courier,Roman,14) //フォントをサイズ14のCourier,Roman体に
+     .text(50,20,"Hello!",RightTop);//"Hello"と表示. 文字列の右上が(50,20)
+</PRE><SMALL CLASS="SMALL">
+<code>setTextFont</code>で指定したフォントがシステム上に無い時には，利用出来
+るものが探索されます。
+サンプルプログラム<code>font.cc</code>のソースや実行例等も参考にしてください。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00067000000000000000">
+EPSファイルの出力</A>
+</H2>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="372"></A>
+<A NAME="373"></A>
+<A NAME="374"></A>
+<A NAME="375"></A>
+<A NAME="376"></A>
+<code>[Graph] Graph&amp; EPSOn();</code>
+<BR><code>[Graph] Graph&amp; EPSOff();</code>
+</SMALL></SMALL>
+<UL>
+<LI>EPS出力のための情報を保存を開始(<code>EPSOn</code>),　および停止(<code>EPSOff</code>)
+する
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[Graph] void resetEPS();</code>
+</SMALL></SMALL>
+<UL>
+<LI>EPS出力のために保存されている情報を消去する。
+</LI>
+</UL><SMALL CLASS="SMALL"></SMALL><PRE>
+[Graph] void EPSOut(char* epsfname, 
+                    int lmargin=LEFT_MARGIN, int bmargin=BOTTOM_MARGIN);
+[Graph] void EPSAppend(ofstream&amp; epsf, 
+                    int lmargin=LEFT_MARGIN, int bmargin=BOTTOM_MARGIN);
+</PRE><SMALL CLASS="SMALL"></SMALL>
+<UL>
+<LI>保存されているデータをEPS形式で新規ファイルに書き込む(<code>EPSOut</code>)，
+  もしくは既存ファイルに追加(<code>EPSAppend</code>)する。
+</LI>
+<LI>引数epsfname (EPSOut)は出力ファイル名
+</LI>
+<LI>引数epsf (EPSAppen)は出力ファイルストリーム
+</LI>
+<LI>必要に応じて左マージン(lmargin),　下部マージン(bmargin)をdot数で
+  指定する。指定しなければデフォルト値として25がマージンとなる。
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+<SMALL CLASS="SMALL">EPSファイルの出力方法はサンプルプログラム<code>sin.cc</code>を参考にしてくだ
+さい。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00068000000000000000">
+発展的な操作のための関数</A>
+</H2>
+<P>
+<DIV STYLE="border: inset blue; background-color: white"><SMALL CLASS="SMALL"><A NAME="388"></A>
+<A NAME="389"></A>
+<code>[JWindow] JWindow&amp;     expose();</code>
+<BR><code>[Xwin]    XController&amp; expose( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>XWinに対して用いた場合は，どれかのウィンドウがexposeされた時，
+JWindowに対して用いた場合は，そのウィンドウがexposeされた時
+にTrueを返す
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<A NAME="392"></A>
+<A NAME="393"></A>
+<code>[JWindow] int getIndex( void );</code>
+</SMALL></SMALL>
+<UL>
+<LI>ウィンドウがjgrで管理されている何番目のウィンドウであるか(インデッ
+  クス)を返す
+</LI>
+<LI>JGR-2.xでの関数名: <code>get_index();</code>
+</LI>
+</UL><SMALL CLASS="SMALL"><SMALL CLASS="SMALL">
+<code>[JWindow] Window getWindow( void );</code>
+<A NAME="396"></A>
+<A NAME="397"></A>
+</SMALL></SMALL>
+<UL>
+<LI>ウィンドウの情報をXlibのWindow構造体で返す
+</LI>
+<LI>JGR-2.xでの関数名: <code>get_window();</code>
+</LI>
+</UL><SMALL CLASS="SMALL">
+</DIV>
+<P>
+
+<H1><A NAME="SECTION00070000000000000000">
+メニューについて</A>
+</H1>
+<P>
+<SMALL CLASS="SMALL">メニュー関連は上原さん(現東レ所属)の作成をしたものをもとに、手を加えたものです。
+感謝です。(注：以下の文書はとても古いもので、現状と一致しません。。。現
+在準備中です。)
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00071000000000000000">
+メニューウィンドウ(Menu Class)について</A>
+</H2>
+<P>
+<SMALL CLASS="SMALL">class Menu のオブジェクトは、メニューの要素（アイテム)として
+ユーザー定義の処理関数とタイトルの組を受けとり、
+メニューウィンドウにタイトルを表示し、アイテムのタイトル
+部分がクリックされると該当する処理関数を呼びます。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">メニューウィンドウはウィンドウマネージャーの支配を受けます。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">Menu は、そのオブジェクトを宣言して直接メッセージを
+送ることにより使用します。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">Menu 自身はその内部にイベント待ちループを持っていません。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">タイトルは最大32文字で日本語は扱いません。
+処理関数としては <code>void (*func)(Menu&amp;)</code> 型の関数をとります。
+アイテムの数に制限はありません。アイテムの数を登録する
+必要もありません。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">ユーザーに公開するメソッドは以下の通りです。
+<A NAME="403"></A>
+<A NAME="404"></A>
+<A NAME="405"></A>
+<A NAME="406"></A>
+<A NAME="407"></A>
+<A NAME="408"></A>
+<A NAME="409"></A>
+<A NAME="410"></A>
+<A NAME="411"></A>
+<A NAME="412"></A>
+<A NAME="413"></A>
+<A NAME="414"></A>
+<A NAME="415"></A>
+</SMALL><PRE>
+  ・Menu&amp; open(int x=0,int y=0);
+          働き  ：メニューウィンドウを開く。最初に宣言。
+          引数  ：メニューウィンドウの ルートでの位置 x,y
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; addItem(const char* title, void (*handler)(Menu&amp;));
+          働き  ：メニューにアイテムを登録する。
+          引数  ：アイテムのタイトルの文字列へのポインタ title,
+                  処理関数へのポインタ handler
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; addSubmenu(const char* title, Menu&amp; submenu, int type=Temporal));
+          働き  ：メニューにサブメニューを登録する。
+          引数  ：アイテムのタイトルの文字列へのポインタ title,
+                  サブメニューへのポインタ submenu,
+                  サブメニューのタイプ type (Temporal もしくは Static)
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; addClose(void);
+          働き  ：メニューをクローズするためのメニュー項目を追加する。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; addExit(void);
+          働き  ：プログラムを終了するためのメニュー項目を追加する。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; setTitle(const char* str);
+          働き  ：メニュー自体のタイトルを登録する。登録しなければタイトルは 'Menu' となる。
+          引数  ：タイトルの文字列へのポインタ str,
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; setType(int type=Static);
+          働き  ：メニューのタイプを決める
+          引数  ：メニュー項目を選んでもメニューを閉じないとき Static、
+                  メニュー項目のクリックがあったときメニューを閉じるなら
+                  Temporal
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; setStyle(int style=Separate) 
+          働き  ：メニューの概観を決める
+          引数  ：メニュー項目の間にしきりをいれるなら Separate, いれな
+                  いなら Flat を指定する。
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; map();  map(int x,int y); 
+          働き  ：メニューウィンドウをマップする。
+                  open() 以降で使用する。
+          引数  ：メニューウィンドウの ルートでの位置 x,y
+                  あるいは、なし
+                  （以前にマップした位置にマップする)
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; unmap();
+          働き  ：メニューウィンドウをアンマップする。
+                  open() 以降で使用する。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+          
+  ・Menu&amp; act();
+          働き  ：マウスクリックをチェックし、クリックがあれば処理関数を呼ぶ。
+                  メインループ中で使用。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; close();
+          働き  ：メニューウィンドウを削除する。とくに明示的に呼ぶ必要はない。
+                  open() を呼べば再びメニューウィンドウは使える。
+          引数  ：なし
+          戻り値：当該オブジェクトの参照
+</PRE><SMALL CLASS="SMALL">
+使い方の例は次節を参照して下さい。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00072000000000000000">
+入力ウィンドウについて</A>
+</H2><SMALL CLASS="SMALL">
+以下の関数を呼ぶことによって、入力ウィンドウをメニュー項目として登録し、
+ユーザーから文字列あるいは数値を取得することができます。
+<A NAME="419"></A>
+<A NAME="420"></A>
+</SMALL><PRE>
+  ・Menu&amp; addGetString(char* value, char* title, char* dflt);
+          働き  ：文字変数value に文字を入力する窓をメニュー項目としてつ
+                  くる。
+          引数  ：文字変数 value, value のデフォルト値 dflt, メッセージ title 
+          戻り値：当該オブジェクトの参照
+
+  ・Menu&amp; addGetValue(double&amp; value, char* title, double dflt);
+          働き  ：変数value に数値を入力する窓をメニュー項目としてつくる。
+          引数  ：変数 value, value のデフォルト値 dflt, メッセージ title 
+          戻り値：当該オブジェクトの参照
+</PRE><SMALL CLASS="SMALL">
+入力ウィンドウは、文字キー以外に、RET、BS、DEL、ESC、を受け付けます。
+ESC で入力ウィンドウをクリアします。マウスのボタンプレスは RET と
+同じ働きをします。
+</SMALL>
+<P>
+<SMALL CLASS="SMALL">各文字列の最大長は Menu の MAX_STR_LEN と同じです。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00073000000000000000">
+簡単な例</A>
+</H2><SMALL CLASS="SMALL">
+以下に使い方の例を示します。
+</SMALL><PRE>
+//
+// メニューウィンドウ、入力ウィンドウの使い方の例
+//
+//   ３つのアイテムを持つメインメニューを開く。
+//   １つめのアイテムで入力を受け付けるための一時的なサブメニューを開く
+//     サブメニューの１つめのアイテムで、文字列を受け付ける。
+//     サブメニューの２つめのアイテムで、数値を受け付ける。
+//   ２つめのアイテムで変数を標準出力に表示するための静的なサブメニューを開く
+//     サブメニューの１つめのアイテムで、文字列を標準出力に出す。
+//     サブメニューの２つめのアイテムで、数値を標準出力に出す。
+//   ３つめのアイテムで終了する。
+//
+//
+#include &lt;iostream.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;jkit/jgr.h&gt;
+
+Menu main_menu(Horizontal),
+        sub_menuA(Vertical,Static),
+        sub_menuB(Vertical,Static);
+
+char str[MAX_STR_LEN+1];
+//char str[256];
+double v;
+
+///////////////////////// サブメニューのためのハンドラ ////////////////////
+
+void handler_subB1(void* dummy){         //文字列を表示する
+  cout &lt;&lt; "str= " &lt;&lt; str &lt;&lt; "\n";
+}
+void handler_subB2(void* dummy){         //数値を表示する
+  cout &lt;&lt; "v= " &lt;&lt; v &lt;&lt; "\n";
+}
+
+////////////////////// メインルーチン //////////////////////
+
+int main(){
+  sub_menuA.open()
+          .addGetString(str,"Input string","aaaa")
+          .addGetValue(v,"Input value",10.0)
+          .addClose();
+
+  sub_menuB.open()
+          .addItem("string",handler_subB1)
+          .addItem("value", handler_subB2)
+          .addClose();
+
+  main_menu.open(100,50)
+          .addSubmenu("input",sub_menuA)
+          .addSubmenu("print",sub_menuB)
+          .addExit()
+          .map();
+
+  while(1) {main_menu.act();}                   // メインメニューを走らせる
+}
+</PRE><SMALL CLASS="SMALL">
+このプログラム例は、sampleディレクトリに menu.cc という名前で置いてあり
+ます。
+</SMALL>
+<P>
+
+<H2><A NAME="SECTION00074000000000000000">
+ウィンドウマネージャーに関する注意</A>
+</H2><SMALL CLASS="SMALL">
+メニューウィンドウと入力ウィンドウはウィンドウマネージャーの
+支配を受けます。これらが開かれる際、アプリケーションが指定する
+ウィンドウ初期位置をウィンドウマネージャーに使用させるために、
+ウィンドウマネージャーの startup file で、そのことを指定して
+おかなければなりません。
+例えば、.twmrc で
+</SMALL><PRE>
+  UsePPosition "on"
+</PRE><SMALL CLASS="SMALL">
+という行を加えなければなりません。あるいは、
+</SMALL><PRE>
+  UsePPosition "non-zero"
+</PRE><SMALL CLASS="SMALL">
+としておけば、ウィンドウの位置を (0,0) と指定すると、
+open されてもすぐにはマップされず、マウスによって初期位置を
+決めることができます。
+</SMALL>
+<P>
+
+<H1><A NAME="SECTION00080000000000000000">
+問題点</A>
+</H1><SMALL CLASS="SMALL">
+バグもあるかもしれませんが、あったら教えて下さい。
+</SMALL>
+<P>
+<BR>
+
+<H2><A NAME="SECTION00090000000000000000">
+索引</A>
+</H2><DL COMPACT>
+<DT><STRONG>Graphクラスの関数</STRONG>
+<DD><DL COMPACT>
+<DT><STRONG><code>axis</code></STRONG>
+<DD><A HREF="jgr.html#237">座標軸関係の描画</A>
+<DT><STRONG><code>axis_box</code></STRONG>
+<DD><A HREF="jgr.html#240">座標軸関係の描画</A>
+<DT><STRONG><code>axisBox</code></STRONG>
+<DD><A HREF="jgr.html#241">座標軸関係の描画</A>
+<DT><STRONG><code>xaxis</code></STRONG>
+<DD><A HREF="jgr.html#244">座標軸関係の描画</A>
+<DT><STRONG><code>yaxis</code></STRONG>
+<DD><A HREF="jgr.html#245">座標軸関係の描画</A>
+<DT><STRONG><code>line</code></STRONG>
+<DD><A HREF="jgr.html#271">直線を描く</A>
+<DT><STRONG><code>dashLine</code></STRONG>
+<DD><A HREF="jgr.html#272">直線を描く</A>
+<DT><STRONG><code>dash_line</code></STRONG>
+<DD><A HREF="jgr.html#273">直線を描く</A>
+<DT><STRONG><code>forgetLastPoint</code></STRONG>
+<DD><A HREF="jgr.html#284">直線を描く</A>
+<DT><STRONG><code>forget</code></STRONG>
+<DD><A HREF="jgr.html#285">直線を描く</A>
+<DT><STRONG><code>setLineSolid</code></STRONG>
+<DD><A HREF="jgr.html#290">直線を描く</A>
+<DT><STRONG><code>setLineDash</code></STRONG>
+<DD><A HREF="jgr.html#291">直線を描く</A>
+<DT><STRONG><code>setLineDDash</code></STRONG>
+<DD><A HREF="jgr.html#292">直線を描く</A>
+<DT><STRONG><code>set_solid_line</code></STRONG>
+<DD><A HREF="jgr.html#293">直線を描く</A>
+<DT><STRONG><code>set_dash_line</code></STRONG>
+<DD><A HREF="jgr.html#294">直線を描く</A>
+<DT><STRONG><code>set_double_dash_line</code></STRONG>
+<DD><A HREF="jgr.html#295">直線を描く</A>
+<DT><STRONG><code>pset</code></STRONG>
+<DD><A HREF="jgr.html#303">その他の図形</A>
+<DT><STRONG><code>rectangle</code></STRONG>
+<DD><A HREF="jgr.html#304">その他の図形</A>
+<DT><STRONG><code>fill</code></STRONG>
+<DD><A HREF="jgr.html#305">その他の図形</A>
+<DT><STRONG><code>circle</code></STRONG>
+<DD><A HREF="jgr.html#306">その他の図形</A>
+<DT><STRONG><code>fillCircle</code></STRONG>
+<DD><A HREF="jgr.html#307">その他の図形</A>
+<DT><STRONG><code>fill_circle</code></STRONG>
+<DD><A HREF="jgr.html#308">その他の図形</A>
+<DT><STRONG><code>poly</code></STRONG>
+<DD><A HREF="jgr.html#309">その他の図形</A>
+<DT><STRONG><code>closePoly</code></STRONG>
+<DD><A HREF="jgr.html#310">その他の図形</A>
+<DT><STRONG><code>fillPoly</code></STRONG>
+<DD><A HREF="jgr.html#311">その他の図形</A>
+<DT><STRONG><code>open</code></STRONG>
+<DD><A HREF="jgr.html#84">グラフの初期化</A>
+<DT><STRONG><code>child</code></STRONG>
+<DD><A HREF="jgr.html#85">グラフの初期化</A>
+<DT><STRONG><code>setFgColor</code></STRONG>
+<DD><A HREF="jgr.html#329">色操作</A>
+<DT><STRONG><code>color</code></STRONG>
+<DD><A HREF="jgr.html#330">色操作</A>
+<DT><STRONG><code>setAxisColor</code></STRONG>
+<DD><A HREF="jgr.html#335">色操作</A>
+<DT><STRONG><code>pushColor</code></STRONG>
+<DD><A HREF="jgr.html#338">色操作</A>
+<DT><STRONG><code>popcolor</code></STRONG>
+<DD><A HREF="jgr.html#339">色操作</A>
+<DT><STRONG><code>setTextFont</code></STRONG>
+<DD><A HREF="jgr.html#350">フォント設定とテキスト操作</A>
+<DT><STRONG><code>setScaleFont</code></STRONG>
+<DD><A HREF="jgr.html#351">フォント設定とテキスト操作</A>
+<DT><STRONG><code>text</code></STRONG>
+<DD><A HREF="jgr.html#362">フォント設定とテキスト操作</A>
+<DT><STRONG><code>EPSOut</code></STRONG>
+<DD><A HREF="jgr.html#372">EPSファイルの出力</A>
+<DT><STRONG><code>EPSOn</code></STRONG>
+<DD><A HREF="jgr.html#373">EPSファイルの出力</A>
+<DT><STRONG><code>resetEPS</code></STRONG>
+<DD><A HREF="jgr.html#374">EPSファイルの出力</A>
+<DT><STRONG><code>EPSOff</code></STRONG>
+<DD><A HREF="jgr.html#375">EPSファイルの出力</A>
+<DT><STRONG><code>EPSAppend</code></STRONG>
+<DD><A HREF="jgr.html#376">EPSファイルの出力</A>
+<DT><STRONG><code>color</code></STRONG>
+<DD><A HREF="jgr.html#103">グラフの初期化</A>
+<DT><STRONG><code>setRatio</code></STRONG>
+<DD><A HREF="jgr.html#140">グラフ描画に関する初期設定</A>
+<DT><STRONG><code>set_ratio</code></STRONG>
+<DD><A HREF="jgr.html#141">グラフ描画に関する初期設定</A>
+<DT><STRONG><code>clear</code></STRONG>
+<DD><A HREF="jgr.html#173">ウィンドウ操作</A>
+<DT><STRONG><code>flush</code></STRONG>
+<DD><A HREF="jgr.html#177">ウィンドウ操作</A>
+<DT><STRONG><code>mousePress</code></STRONG>
+<DD><A HREF="jgr.html#189">マウス操作</A>
+<DT><STRONG><code>mouse_press</code></STRONG>
+<DD><A HREF="jgr.html#190">マウス操作</A>
+<DT><STRONG><code>ev2button</code></STRONG>
+<DD><A HREF="jgr.html#197">マウス操作</A>
+<DT><STRONG><code>ev2x</code></STRONG>
+<DD><A HREF="jgr.html#201">マウス操作</A>
+<DT><STRONG><code>ev2y</code></STRONG>
+<DD><A HREF="jgr.html#202">マウス操作</A>
+<DT><STRONG><code>mouseWait</code></STRONG>
+<DD><A HREF="jgr.html#209">マウス操作</A>
+<DT><STRONG><code>mouse_wait</code></STRONG>
+<DD><A HREF="jgr.html#210">マウス操作</A>
+<DT><STRONG><code>set_xscale_full</code></STRONG>
+<DD><A HREF="jgr.html#222">座標軸関係の描画</A>
+<DT><STRONG><code>set_yscale_full</code></STRONG>
+<DD><A HREF="jgr.html#223">座標軸関係の描画</A>
+<DT><STRONG><code>set_scale_full</code></STRONG>
+<DD><A HREF="jgr.html#224">座標軸関係の描画</A>
+<DT><STRONG><code>set_axis_with_digit</code></STRONG>
+<DD><A HREF="jgr.html#225">座標軸関係の描画</A>
+<DT><STRONG><code>setXScaleFull</code></STRONG>
+<DD><A HREF="jgr.html#226">座標軸関係の描画</A>
+<DT><STRONG><code>setYScaleFull</code></STRONG>
+<DD><A HREF="jgr.html#227">座標軸関係の描画</A>
+<DT><STRONG><code>setScaleFull</code></STRONG>
+<DD><A HREF="jgr.html#228">座標軸関係の描画</A>
+<DT><STRONG><code>setAxisWithDigit</code></STRONG>
+<DD><A HREF="jgr.html#229">座標軸関係の描画</A>
+</DL>
+<DT><STRONG>JWindowクラスの関数</STRONG>
+<DD><DL COMPACT>
+<DT><STRONG><code>axis</code></STRONG>
+<DD><A HREF="jgr.html#236">座標軸関係の描画</A>
+<DT><STRONG><code>setBgColor</code></STRONG>
+<DD><A HREF="jgr.html#342">色操作</A>
+<DT><STRONG><code>setTextFont</code></STRONG>
+<DD><A HREF="jgr.html#348">フォント設定とテキスト操作</A>
+<DT><STRONG><code>setScaleFont</code></STRONG>
+<DD><A HREF="jgr.html#349">フォント設定とテキスト操作</A>
+<DT><STRONG><code>expose</code></STRONG>
+<DD><A HREF="jgr.html#388">発展的な操作のための関数</A>
+<DT><STRONG><code>getIndex</code></STRONG>
+<DD><A HREF="jgr.html#392">発展的な操作のための関数</A>
+<DT><STRONG><code>get_index</code></STRONG>
+<DD><A HREF="jgr.html#393">発展的な操作のための関数</A>
+<DT><STRONG><code>getWindow</code></STRONG>
+<DD><A HREF="jgr.html#396">発展的な操作のための関数</A>
+<DT><STRONG><code>get_window</code></STRONG>
+<DD><A HREF="jgr.html#397">発展的な操作のための関数</A>
+<DT><STRONG><code>graph</code></STRONG>
+<DD><A HREF="jgr.html#115">ウィンドウにグラフを登録</A>
+<DT><STRONG><code>map</code></STRONG>
+<DD><A HREF="jgr.html#125">ウィンドウの描画</A>
+<DT><STRONG><code>flush</code></STRONG>
+<DD><A HREF="jgr.html#131">ウィンドウの描画</A>
+<DT><STRONG><code>addLeftMargin</code></STRONG>
+<DD><A HREF="jgr.html#155">その他初期化に関する関数</A>
+<DT><STRONG><code>map</code></STRONG>
+<DD><A HREF="jgr.html#164">ウィンドウ操作</A>
+<DT><STRONG><code>unmap</code></STRONG>
+<DD><A HREF="jgr.html#165">ウィンドウ操作</A>
+<DT><STRONG><code>clear</code></STRONG>
+<DD><A HREF="jgr.html#172">ウィンドウ操作</A>
+<DT><STRONG><code>flush</code></STRONG>
+<DD><A HREF="jgr.html#176">ウィンドウ操作</A>
+<DT><STRONG><code>mousePress</code></STRONG>
+<DD><A HREF="jgr.html#187">マウス操作</A>
+<DT><STRONG><code>mouse_press</code></STRONG>
+<DD><A HREF="jgr.html#188">マウス操作</A>
+<DT><STRONG><code>ev2button</code></STRONG>
+<DD><A HREF="jgr.html#198">マウス操作</A>
+<DT><STRONG><code>mouseWait</code></STRONG>
+<DD><A HREF="jgr.html#207">マウス操作</A>
+<DT><STRONG><code>mouse_wait</code></STRONG>
+<DD><A HREF="jgr.html#208">マウス操作</A>
+<DT><STRONG><code>open</code></STRONG>
+<DD><A HREF="jgr.html#69">ウィンドウを開く</A>
+</DL>
+<DT><STRONG>Menuクラスの関数</STRONG>
+<DD><DL COMPACT>
+<DT><STRONG><code>addItem</code></STRONG>
+<DD><A HREF="jgr.html#403">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>addSubmenu</code></STRONG>
+<DD><A HREF="jgr.html#404">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>addClose</code></STRONG>
+<DD><A HREF="jgr.html#405">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>addExit</code></STRONG>
+<DD><A HREF="jgr.html#406">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>addItem</code></STRONG>
+<DD><A HREF="jgr.html#407">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>setTitle</code></STRONG>
+<DD><A HREF="jgr.html#408">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>setType</code></STRONG>
+<DD><A HREF="jgr.html#409">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>setStyle</code></STRONG>
+<DD><A HREF="jgr.html#410">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>open</code></STRONG>
+<DD><A HREF="jgr.html#411">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>map</code></STRONG>
+<DD><A HREF="jgr.html#412">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>unmap</code></STRONG>
+<DD><A HREF="jgr.html#413">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>act</code></STRONG>
+<DD><A HREF="jgr.html#414">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>close</code></STRONG>
+<DD><A HREF="jgr.html#415">メニューウィンドウ(Menu Class)について</A>
+<DT><STRONG><code>addGetString</code></STRONG>
+<DD><A HREF="jgr.html#419">入力ウィンドウについて</A>
+<DT><STRONG><code>addGetValue</code></STRONG>
+<DD><A HREF="jgr.html#420">入力ウィンドウについて</A>
+</DL>
+<DT><STRONG>XControllerクラスの関数</STRONG>
+<DD><DL COMPACT>
+<DT><STRONG><code>expose</code></STRONG>
+<DD><A HREF="jgr.html#389">発展的な操作のための関数</A>
+<DT><STRONG><code>flush</code></STRONG>
+<DD><A HREF="jgr.html#135">ウィンドウの描画</A>
+<DT><STRONG><code>close</code></STRONG>
+<DD><A HREF="jgr.html#168">ウィンドウ操作</A>
+<DT><STRONG><code>flush</code></STRONG>
+<DD><A HREF="jgr.html#178">ウィンドウ操作</A>
+<DT><STRONG><code>sync</code></STRONG>
+<DD><A HREF="jgr.html#181">ウィンドウ操作</A>
+<DT><STRONG><code>mousePress</code></STRONG>
+<DD><A HREF="jgr.html#191">マウス操作</A>
+<DT><STRONG><code>mouse_press</code></STRONG>
+<DD><A HREF="jgr.html#192">マウス操作</A>
+<DT><STRONG><code>ev2button</code></STRONG>
+<DD><A HREF="jgr.html#199">マウス操作</A>
+<DT><STRONG><code>mouseWait</code></STRONG>
+<DD><A HREF="jgr.html#211">マウス操作</A>
+<DT><STRONG><code>mouse_wait</code></STRONG>
+<DD><A HREF="jgr.html#212">マウス操作</A>
+</DL>
+<DT><STRONG>関数</STRONG>
+<DD><DL COMPACT>
+<DT><STRONG><code>ev2button</code></STRONG>
+<DD><A HREF="jgr.html#200">マウス操作</A>
+</DL>
+
+</DL>
+</SMALL>
+<P>
+
+<H1><A NAME="SECTION000100000000000000000">
+この文書について...</A>
+</H1><SMALL CLASS="SMALL">
+ <P>
+この文書は<A HREF="http://www.latex2html.org/"><STRONG>LaTeX</STRONG>2<tt>HTML</tt></A> 翻訳プログラム Version 2002-2-1 (1.71)
+<P>
+Copyright &#169; 1993, 1994, 1995, 1996,
+<A HREF="http://cbl.leeds.ac.uk/nikos/personal.html">Nikos Drakos</A>, 
+Computer Based Learning Unit, University of Leeds,
+<BR>
+Copyright &#169; 1997, 1998, 1999,
+<A HREF="http://www.maths.mq.edu.au/~ross/">Ross Moore</A>, 
+Mathematics Department, Macquarie University, Sydney.
+<P>を<A HREF="http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/ltx2html.html">日本語化したもの</A>(
+2002-2-1 (1.71) JA patch-1.9 版)
+<P>
+Copyright &#169; 1998, 1999,
+<A HREF="http://www.topstudio.co.jp/~kmuto/">Kenshi Muto</A>, 
+Debian Project.
+<P>
+Copyright &#169; 2000,
+<A HREF="http://www.vinelinux.org/">Jun Nishii</A>, 
+Project Vine.
+<P>
+Copyright &#169; 2001, 2002,
+<A HREF="http://takeno.iee.niit.ac.jp/~shige/">Shige TAKENO</A>, 
+Niigata Inst.Tech.
+<P>
+Copyright &#169; 2002,
+<A HREF="http://www.vinelinux.org/">KOBAYASHI R. Taizo</A>, 
+Project Vine.
+<P>を用いて生成されました。
+<P>コマンド行は以下の通りでした。: <BR>
+ <STRONG>latex2html</STRONG> <tt>-split 0 jgr.tex</tt>.
+<P>翻訳は  によって 平成20年10月7日 に実行されました。
+<BR><HR><H4>脚注</H4>
+<DL>
+<DT><A NAME="foot46">... 下さい</A><A
+ HREF="jgr.html#tex2html2"><SUP><SPAN CLASS="arabic">1</SPAN></SUP></A></DT>
+<DD>IntelのC++コンパイラでも動作確認しています。
+
+</DD>
+</DL>
+<DIV CLASS="navigation"><HR>
+<IMG WIDTH="81" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next_inactive" SRC="nx_grp_g.png"> 
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up_g.png"> 
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev_g.png">   <BR>
+</DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+<I> <BR>
+平成20年10月7日</I>
+</ADDRESS>
+</BODY>
+</HTML>
